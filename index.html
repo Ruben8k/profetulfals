@@ -97,7 +97,7 @@ input{
 }
 #timer{font-size:calc(18px + 1vw); margin:10px; display:none;}
 #endButtons{margin-top:20px; display:none; flex-direction:column;}
-#endButtons button{display:block;}
+#endButtons button{display:block; margin:10px auto;}
 </style>
 </head>
 <body>
@@ -284,15 +284,20 @@ function newRound(){
     revealed=false;
     document.getElementById("setup").style.display="block";
     document.getElementById("game").style.display="none";
+
     document.querySelector(".card-back").innerText="";
     document.querySelector(".card-back").classList.remove("impostor");
     document.querySelector(".card").classList.remove("flipped");
     document.querySelector(".card").style.display="flex";
+
+    // Reset timer complet
     clearInterval(timerInterval);
     document.getElementById("timer").innerText="00:00";
+    document.getElementById("startTimerBtn").style.display="inline-block";
+    document.getElementById("timerControls").style.display="none";
+
     document.getElementById("endButtons").style.display="none";
     document.getElementById("nextBtn").style.display="inline-block";
-    document.getElementById("timerControls").style.display="none";
 }
 </script>
 </body>
