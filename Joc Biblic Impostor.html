@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>Detectiv Biblic - Cinematic Epic</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align:center;
+    background:#111;
+    color:white;
+    padding:10px;
+}
+h1{font-size:calc(18px + 2vw);}
+button{
+    padding:10px 20px;
+    margin:8px auto;
+    font-size:calc(14px + 1vw);
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    background:#222;
+    color:white;
+    width:80%;
+    max-width:350px;
+}
+button:hover{background:#555;}
+input{
+    padding:8px;
+    margin:5px auto;
+    font-size:calc(14px + 1vw);
+    background:#222;
+    color:white;
+    border:none;
+    border-radius:5px;
+    width:80%;
+    max-width:350px;
+}
+.card{
+    font-size:calc(18px + 1.5vw);
+    margin:20px auto;
+    padding:40px;
+    border-radius:12px;
+    background:#222;
+    width:90%;
+    max-width:380px;
+    height:130px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    perspective:1000px;
+    cursor:pointer;
+    box-shadow:0 0 10px #000;
+    transition:0.6s;
+}
+.card-inner{
+    width:100%;
+    height:100%;
+    transform-style: preserve-3d;
+    transition: transform 1s cubic-bezier(.68,-0.55,.27,1.55);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position: relative;
+}
+.card.flipped .card-inner{
+    transform: rotateY(180deg) rotateZ(5deg);
+}
+.card-front, .card-back{
+    position:absolute;
+    backface-visibility: hidden;
+    width:100%;
+    height:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    padding:10px;
+}
+.card-front{
+    background:#222;
+    color:white;
+    font-weight:bold;
+}
+.card-back{
+    background:#f39c12;
+    color:#111;
+    font-weight:bold;
+    box-shadow:0 0 20px #f39c12;
+    transform: rotateY(180deg);
+}
+.card-back.impostor{
+    background:#e74c3c;
+    color:white;
+    box-shadow:0 0 25px #e74c3c;
+}
+#timer{font-size:calc(18px + 1vw); margin:10px; display:none;}
+#endButtons{margin-top:20px; display:none; flex-direction:column;}
+#endButtons button{display:block;}
+</style>
+</head>
+<body>
+
+<h1>🕵️ Detectiv Biblic</h1>
+
+<div id="setup">
+<h3>Număr jucători</h3>
+<input type="number" id="playerCount" min="3" max="40" value="10"><br>
+<button id="btnCreatePlayers">Introdu nume</button>
+<div id="players"></div>
+
+<h3>Număr impostori (Profet fals)</h3>
+<input type="number" id="impostors" value="2" min="1"><br><br>
+
+<h3>Timer rundă (minute)</h3>
+<input type="number" id="roundTimer" value="5" min="1" max="60"><br><br>
+
+<button onclick="startGame()">Start joc</button>
+</div>
+
+<div id="game" style="display:none;">
+<h2 id="playerTurn"></h2>
+
+<div class="card" id="roleCard" onclick="revealRole()">
+  <div class="card-inner">
+    <div class="card-front">Apasă AICI ca să dezvălui rolul tău</div>
+    <div class="card-back"></div>
+  </div>
+</div>
+
+<button id="nextBtn" onclick="nextPlayer()">Următorul jucător</button>
+
+<div id="timerControls" style="display:none;">
+<h3>⏱ Timer rundă</h3>
+<div id="timer">00:00</div>
+<button id="startTimerBtn" onclick="startTimer()">Start Timer</button>
+</div>
+
+<div id="endButtons">
+<button onclick="revealAll()">Descoperă toți jucătorii</button>
+<button onclick="newRound()">Începe joc nou</button>
+</div>
+</div>
+
+<audio id="dramaticSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+<audio id="endSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-02.mp3"></audio>
+
+<script>
+const characters = [
+"David","Noe","Moise","Iona","Daniel","Samson","Estera","Iosif",
+"Avraam","Iosua","Ilie","Elisei","Rut","Ghedeon","Solomon","Maria",
+"Pavel","Petru","Exodul","Arca lui Noe"
+];
+
+let players=[], roles=[], currentPlayer=0, revealed=false, timeLeft=0, timerInterval, roundMinutes=5;
+
+// CREARE INPUT NUME
+document.getElementById("btnCreatePlayers").addEventListener("click", ()=>{
+    const count = document.getElementById("playerCount").value;
+    const div = document.getElementById("players");
+    const oldValues = [];
+    for(let i=0;i<count;i++){
+        const oldInput = document.getElementById("p"+i);
+        oldValues.push(oldInput ? oldInput.value : "");
+    }
+    div.innerHTML="";
+    for(let i=0;i<count;i++){
+        div.innerHTML += `<input placeholder="Jucător ${i+1}" id="p${i}" value="${oldValues[i] || ""}"><br>`;
+    }
+});
+
+// START JOC
+function startGame(){
+    players=[];
+    const count=document.getElementById("playerCount").value;
+    for(let i=0;i<count;i++){
+        let name=document.getElementById("p"+i).value || ("Jucător "+(i+1));
+        players.push(name);
+    }
+    const impostorCount=parseInt(document.getElementById("impostors").value);
+    roundMinutes = parseInt(document.getElementById("roundTimer").value);
+    const word = characters[Math.floor(Math.random()*characters.length)];
+
+    roles=[];
+    for(let i=0;i<players.length;i++){
+        roles.push("Personajul este: " + word);
+    }
+    for(let i=0;i<impostorCount;i++){
+        let index;
+        do{
+            index=Math.floor(Math.random()*roles.length);
+        }while(roles[index]=="Ești un Profet fals 😈");
+        roles[index]="Ești un Profet fals 😈";
+    }
+    shuffle(roles);
+
+    document.getElementById("setup").style.display="none";
+    document.getElementById("game").style.display="block";
+    currentPlayer=0;
+    revealed=false;
+    document.querySelector(".card-back").innerText="";
+    document.querySelector(".card-back").classList.remove("impostor");
+    document.querySelector(".card").classList.remove("flipped");
+    document.getElementById("endButtons").style.display="none";
+    document.getElementById("timerControls").style.display="none";
+    document.getElementById("nextBtn").style.display="inline-block";
+    document.querySelector(".card").style.display="flex";
+    updateTurn();
+}
+
+function shuffle(array){
+    for(let i=array.length-1;i>0;i--){
+        const j=Math.floor(Math.random()*(i+1));
+        [array[i],array[j]]=[array[j],array[i]];
+    }
+}
+
+function revealRole(){
+    if(!revealed){
+        const card=document.querySelector(".card");
+        const back=document.querySelector(".card-back");
+        back.innerText=roles[currentPlayer];
+        if(roles[currentPlayer].includes("Profet fals")) back.classList.add("impostor");
+        card.classList.add("flipped");
+        document.getElementById("dramaticSound").play();
+        revealed=true;
+    }
+}
+
+function nextPlayer(){
+    if(!revealed) return alert("Trebuie să dezvălui cartea înainte!");
+    revealed=false;
+    const card=document.querySelector(".card");
+    card.classList.remove("flipped");
+    const back=document.querySelector(".card-back");
+    back.innerText="";
+    back.classList.remove("impostor");
+    currentPlayer++;
+    if(currentPlayer>=players.length){
+        document.getElementById("playerTurn").innerText="Toți au primit rolul! 🎉";
+        document.getElementById("timerControls").style.display="block";
+        document.getElementById("nextBtn").style.display="none";
+        document.querySelector(".card").style.display="none";
+        document.getElementById("endButtons").style.display="flex";
+        return;
+    }
+    updateTurn();
+}
+
+function updateTurn(){
+    document.getElementById("playerTurn").innerText=players[currentPlayer]+", e rândul tău";
+}
+
+function startTimer(){
+    clearInterval(timerInterval);
+    timeLeft = roundMinutes * 60;
+    document.getElementById("startTimerBtn").style.display="none";
+    document.getElementById("timer").style.display="block";
+    timerInterval=setInterval(()=>{
+        timeLeft--;
+        let min=Math.floor(timeLeft/60);
+        let sec=timeLeft%60;
+        document.getElementById("timer").innerText=
+        `${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`;
+        if(timeLeft<=0){
+            clearInterval(timerInterval);
+            document.getElementById("endSound").play();
+            alert("Timpul s-a terminat!");
+        }
+    },1000);
+}
+
+function revealAll(){
+    let allRoles="";
+    for(let i=0;i<players.length;i++){
+        allRoles+=players[i]+" → "+roles[i]+"\n";
+    }
+    alert(allRoles);
+}
+
+function newRound(){
+    currentPlayer=0;
+    revealed=false;
+    document.getElementById("setup").style.display="block";
+    document.getElementById("game").style.display="none";
+    document.querySelector(".card-back").innerText="";
+    document.querySelector(".card-back").classList.remove("impostor");
+    document.querySelector(".card").classList.remove("flipped");
+    document.querySelector(".card").style.display="flex";
+    clearInterval(timerInterval);
+    document.getElementById("timer").innerText="00:00";
+    document.getElementById("endButtons").style.display="none";
+    document.getElementById("nextBtn").style.display="inline-block";
+    document.getElementById("timerControls").style.display="none";
+}
+</script>
+</body>
+</html>
