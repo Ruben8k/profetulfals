@@ -79,6 +79,13 @@ button{
 <h3>Impostori (Profet fals)</h3>
 <input type="number" id="impostors" value="2">
 
+<h3>Categorie joc</h3>
+<select id="category">
+  <option value="characters">Personaje biblice</option>
+  <option value="events">Evenimente importante</option>
+  <option value="verses">Versete biblice</option>
+</select>
+
 <h3>Timer (minute)</h3>
 <input type="number" id="roundTimer" value="5">
 
@@ -115,10 +122,36 @@ Apasă AICI ca să dezvălui rolul tău
 
 <script>
 
-const characters=[
-"David","Noe","Moise","Daniel","Iona","Estera",
-"Iosif","Avraam","Iosua","Ilie","Rut","Ghedeon"
-];
+const categories = {
+
+characters: [
+"Sara","Rebeca","Iosua","Daniel","Iefta","Samson",
+"Abigail","Neemia","Saul din Tars","Ioan Botezatorul","Rut","Maria mama lui Isus","Lazar","Moise"
+],
+
+events: [
+"Penticosta din 33 e.n.","Exodul din Egipt","Căderea Ierihonului",
+"Arca lui Noe","Trecerea Mării Roșii",
+"David și Goliat","Nașterea lui Isus",
+"Învierea lui Isus","Comemorarea mortii lui Isus","Turnul Babel",
+"Sara se face stalp de sare","Daniel in groapa cu lei",
+"Isus curata templul de talhari","Armaghedon"
+],
+
+verses: [
+"Ioan 3:16",
+"Psalmul 37:29",
+"Matei 5:3",
+"Proverbe 3:5",
+"Filipeni 4:6",
+"Romani 8:38,39",
+"Isaia 41:10",
+"Psalmul 119:105",
+"Matei 6:33",
+"Revelatia 21:4"
+]
+
+};
 
 let players=[],roles=[];
 let currentPlayer=0;
@@ -168,10 +201,15 @@ for(let i=0;i<count;i++){
 roundMinutes=parseInt(document.getElementById("roundTimer").value);
 
 const impostorCount=parseInt(document.getElementById("impostors").value);
-const word=characters[Math.floor(Math.random()*characters.length)];
+const selectedCategory =
+document.getElementById("category").value;
+
+const list = categories[selectedCategory];
+
+const word = list[Math.floor(Math.random()*list.length)];
 
 roles=[];
-players.forEach(()=>roles.push("Personajul este: "+word));
+players.forEach(()=>roles.push("Este vorba despre: "+word));
 
 for(let i=0;i<impostorCount;i++){
  let r;
