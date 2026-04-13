@@ -148,17 +148,17 @@ button:hover{
 
 <div id="players"></div>
 
-<h3>Impostori (Profet fals)</h3>
+<h3>Număr profeţi falşi</h3>
 <input type="number" id="impostors" value="2" min="1">
 
 <h3>Categorie joc</h3>
 <select id="category">
   <option value="characters">Personaje biblice</option>
-  <option value="events">Relatari biblice</option>
+  <option value="events">Relatări biblice</option>
   <option value="verses">Versete biblice</option>
 </select>
 
-<h3>Timer (minute)</h3>
+<h3>Timp (minute)</h3>
 <input type="number" id="roundTimer" value="5" min="1">
 
 <br>
@@ -178,7 +178,7 @@ Apasă AICI ca să dezvălui rolul tău
 <div id="timerSection" style="display:none;">
 <h3>⏱ Timer rundă</h3>
 <div id="timer">00:00</div>
-<button id="startTimerBtn" onclick="startTimer()">Start Timer</button>
+<button id="startTimerBtn" onclick="startTimer()">Start Timp</button>
 </div>
 
 <div id="endButtons">
@@ -206,17 +206,84 @@ Apasă AICI ca să dezvălui rolul tău
 const categories = {
 
 characters: [
-"Sara","Rebeca","Iosua","Daniel","Iefta","Samson",
-"Abigail","Neemia","Saul din Tars","Ioan Botezatorul","Rut","Maria mama lui Isus","Lazar","Moise"
+    "Sara",
+    "Rebeca",
+    "Iosua",
+    "Daniel",
+    "Iefta judecătorul",
+    "Samson",
+    "Abigail",
+    "Neemia",
+    "Saul din Tars",
+    "Ioan Botezatorul",
+    "Rut",
+    "Maria mama lui Isus",
+    "Lazăr",
+    "Moise",
+    "Avraam",
+    "Isaac",
+    "Iacov",
+    "Iosif - fiul lui Iacob",
+    "David",
+    "Solomon",
+    "Ilie",
+    "Elisei",
+    "Estera",
+    "Iov",
+    "Ezra",
+    "Maria Magdalena",
+    "Petru",
+    "Pavel",
+    "Timotei",
+    "Manase",
+    "Ahab",
+    "Izabela",
+    "Abel",
+    "Noe",
+    "Faraon",
+    "Iuda Iscarioteanul",
+    "Absalom","Cain",
+    "Lot",
+    "Ghedeon",
+    "Marta",
+    "Toma"
 ],
 
 events: [
-"Penticosta din 33 e.n.","Exodul din Egipt","Căderea Ierihonului",
-"Arca lui Noe","Trecerea Mării Roșii",
-"David și Goliat","Nașterea lui Isus",
-"Învierea lui Isus","Comemorarea mortii lui Isus","Turnul Babel",
-"Sotia lui Lot se face stalp de sare","Daniel in groapa cu lei",
-"Isus curata templul de talhari","Armaghedon"
+    "Penticosta din 33 e.n.",
+    "Exodul din Egipt",
+    "Căderea Ierihonului",
+    "Arca lui Noe",
+    "Trecerea Mării Roșii",
+    "David și Goliat",
+    "Nașterea lui Isus",
+    "Învierea lui Isus",
+    "Comemorarea morții lui Isus",
+    "Turnul Babel",
+    "Soția lui Lot se face stalp de sare",
+    "Daniel in groapa cu lei",
+    "Isus curăță templul de talhari",
+    "Armaghedon",
+    "Creerea pamantului",
+    "Căderea lui Adam și Eva",
+    "Cain il ucide pe Abel",
+    "Potopul",
+    "Distrugerea Sodomei si Gomorei",
+    "Jertfirea lui Isaac",
+    "Vanzarea lui Iosif in Egipt",
+    "Cele 10 plagi ale Egiptului",
+    "Vitelul de aur",
+    "Sarpele de arama",
+    "Ridicarea lui Ilie la cer",
+    "Botezul lui Isus",
+    "Ispitirea in pustiu",
+    "Predica de pe munte",
+    "Intrarea in Ierusalim",
+    "Rugaciunea din Ghetsimani",
+    "Tradarea lui Iuda",
+    "Convertirea lui Saul",
+    "Botezul eunucului etiopian",
+    "Eliberarea lui Petru din inchisoare"
 ],
 
 verses: [
@@ -229,6 +296,29 @@ verses: [
 "Isaia 41:10",
 "Psalmul 119:105",
 "Matei 6:33",
+"Faptele 20:35",
+"2 Timotei 3:1-5",
+"Daniel 2:44",
+"2 Timotei 3:16, 17",
+"Proverbele 3:5, 6",
+"Matei 28:19, 20",
+"Efeseni 5:22, 23",
+"2 Petru 3:8",
+"Eclesiastul 9:5",
+"Psalmul 83:18",
+"1 Ioan 4:8",
+"Ioan 17:3",
+"Ioan 5:28, 29",
+"Matei 24:14",
+"Romani 5:12",
+"Iacov 4:8",
+"Matei 6:9, 10",
+"Isaia 55:11",
+"Efeseni 5:33",
+"Isaia 65:21-23",
+"Ioan 13:35",
+"Galateni 5:22, 23",
+"Geneza 1:1",
 "Revelatia 21:4"
 ]
 
