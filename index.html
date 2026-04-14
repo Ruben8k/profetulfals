@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -572,28 +571,13 @@
       visibility: hidden;
     }
 
-    #intro h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
-      color: white;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    }
-
-    #intro button {
-      font-size: 20px;
-      padding: 15px 30px;
-      background: #f39c12;
-      color: black;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.3s;
-      position: relative;
-      z-index: 1;
-    }
-
-    #intro button:hover {
-      background: #e67e22;
+    #intro img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      position: absolute;
+      top: 0;
+      left: 0;
     }
   </style>
 </head>
@@ -601,9 +585,8 @@
 <body>
 
   <!-- Intro Screen -->
-  <div id="intro">
-    <h1>🕵️ Detectiv Biblic</h1>
-    <button onclick="startIntro()">Start</button>
+  <div id="intro" onclick="startIntro()">
+    <img src="images/startlogo.png" alt="Detectiv Biblic">
   </div>
 
   <h1>🕵️ Detectiv Biblic</h1>
