@@ -10,240 +10,413 @@
     box-sizing: border-box;
 }
 
-body{
-    font-family:Arial;
-    text-align:center;
-    background:#111;
-    color:white;
-    margin:0;
-    padding:15px;
-    padding-left:max(15px, env(safe-area-inset-left));
-    padding-right:max(15px, env(safe-area-inset-right));
-    padding-top:max(15px, env(safe-area-inset-top));
-    padding-bottom:max(15px, env(safe-area-inset-bottom));
-    min-height:100vh;
-    overflow-x:hidden;
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
 }
 
-button,input,select{
-    font-size:18px;
-    padding:10px;
-    margin:8px;
-    border-radius:8px;
-    border:none;
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: #111;
+    color: white;
+    padding: 15px;
+    padding-left: max(15px, env(safe-area-inset-left));
+    padding-right: max(15px, env(safe-area-inset-right));
+    padding-top: max(15px, env(safe-area-inset-top));
+    padding-bottom: max(15px, env(safe-area-inset-bottom));
+    min-height: 100vh;
 }
 
-button{
-    background:#222;
-    color:white;
-    width:90%;
-    max-width:350px;
-    cursor:pointer;
+h1 {
+    margin: 0 0 20px 0;
+    font-size: 28px;
+    padding: 0 10px;
 }
 
-button:hover{
-    background:#333;
+h2 {
+    margin: 10px 0;
+    font-size: 20px;
+    padding: 0 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
-.card{
-    background:#222;
-    padding:40px 20px;
-    margin:25px auto;
-    border-radius:12px;
-    width:90%;
-    max-width:380px;
-    cursor:pointer;
-    transition:.6s;
-    word-wrap:break-word;
-    overflow-wrap:break-word;
+h3 {
+    margin: 15px 0 8px 0;
+    font-size: 16px;
 }
 
-.flipped{
-    background:#f39c12;
-    color:black;
+input, select {
+    font-size: 16px;
+    padding: 12px;
+    margin: 8px auto;
+    border-radius: 8px;
+    border: 1px solid #444;
+    background: #1a1a1a;
+    color: white;
+    width: 90%;
+    max-width: 350px;
+    display: block;
 }
 
-.impostor{
-    background:#e74c3c!important;
-    color:white!important;
+input:focus, select:focus {
+    outline: none;
+    border-color: #f39c12;
+    background: #222;
 }
 
-#timer{
-    font-size:28px;
-    margin-top:10px;
-    display:none;
+button {
+    font-size: 16px;
+    padding: 12px 15px;
+    margin: 8px auto;
+    border-radius: 8px;
+    border: none;
+    background: #222;
+    color: white;
+    width: 90%;
+    max-width: 350px;
+    cursor: pointer;
+    display: block;
+    transition: background 0.3s;
 }
 
-#timer.expired{
-    color:#e74c3c;
+button:hover {
+    background: #333;
 }
 
-#endButtons{
-    display:none;
-    flex-direction:column;
-    align-items:center;
-    gap:10px;
-    width:100%;
+button:active {
+    background: #1a1a1a;
+    transform: scale(0.98);
 }
 
-#endButtons button {
-    width:90%;
-    max-width:350px;
+.card {
+    background: #222;
+    padding: 30px 20px;
+    margin: 20px auto;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 380px;
+    cursor: pointer;
+    transition: all 0.6s ease;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    min-height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
 }
 
-/* Modal overlay */
-#modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.75);
-    z-index:100;
-    align-items:center;
-    justify-content:center;
-    padding:15px;
-    padding-left:max(15px, env(safe-area-inset-left));
-    padding-right:max(15px, env(safe-area-inset-right));
+.card:active {
+    transform: scale(0.95);
 }
 
-#modal.open{
-    display:flex;
+.flipped {
+    background: #f39c12;
+    color: black;
+    font-weight: bold;
 }
 
-#modalBox{
-    background:#222;
-    border-radius:14px;
-    padding:28px 24px;
-    max-width:360px;
-    width:100%;
-    text-align:left;
+.impostor {
+    background: #e74c3c !important;
+    color: white !important;
+    font-weight: bold;
 }
 
-#modalBox h3{
-    margin:0 0 16px;
-    font-size:20px;
-    text-align:center;
+#timer {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 15px 0;
+    display: none;
+    font-variant-numeric: tabular-nums;
 }
 
-#modalList{
-    list-style:none;
-    padding:0;
-    margin:0 0 20px;
-    max-height:60vh;
-    overflow-y:auto;
+#timer.expired {
+    color: #e74c3c;
+    animation: blink 0.5s infinite;
 }
 
-#modalList li{
-    padding:8px 0;
-    border-bottom:1px solid #333;
-    font-size:14px;
-    word-wrap:break-word;
-    overflow-wrap:break-word;
-}
-
-#modalList li:last-child{
-    border-bottom:none;
-}
-
-.impostor-label{
-    color:#e74c3c;
-    font-weight:bold;
-}
-
-#modalClose{
-    width:100%;
-    background:#f39c12;
-    color:black;
-    font-weight:bold;
-    border-radius:8px;
-    padding:12px;
-    font-size:16px;
-    cursor:pointer;
-    border:none;
-}
-
-#game {
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:15px;
-    min-height:100vh;
-    padding-bottom:20px;
-}
-
-#game h2 {
-    margin:10px 0;
-    font-size:20px;
-    word-wrap:break-word;
-    overflow-wrap:break-word;
-    max-width:90%;
-}
-
-#nextBtn {
-    width:90%;
-    max-width:350px;
-}
-
-#timerSection {
-    display:none;
-    width:100%;
-    text-align:center;
-}
-
-#timerSection h3 {
-    margin:20px 0 10px;
-}
-
-#startTimerBtn {
-    width:90%;
-    max-width:350px;
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0.5; }
 }
 
 #setup {
-    padding:10px 0;
-}
-
-#setup h3, #setup input, #setup select {
-    width:90%;
-    max-width:350px;
-    margin-left:auto;
-    margin-right:auto;
-}
-
-#setup input, #setup select {
-    display:block;
-    margin:8px auto;
+    padding: 10px 0;
+    margin: 0 auto;
+    max-width: 400px;
 }
 
 #players {
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 15px 0;
 }
 
 #players input {
-    width:90%;
-    max-width:350px;
-    display:block;
+    margin: 4px auto;
 }
 
 #players br {
-    display:none;
+    display: none;
 }
 
-/* Media query pentru tablet și desktop */
+#game {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    min-height: 100vh;
+    padding-bottom: 30px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+#playerTurn {
+    width: 100%;
+    padding: 0 10px;
+}
+
+#nextBtn {
+    width: 90%;
+    max-width: 350px;
+}
+
+#timerSection {
+    display: none !important;
+    width: 100%;
+    text-align: center;
+    padding: 20px 0;
+}
+
+#timerSection h3 {
+    margin: 0 0 10px 0;
+}
+
+#timerSection.active {
+    display: block !important;
+}
+
+#startTimerBtn {
+    width: 90%;
+    max-width: 350px;
+}
+
+#endButtons {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 20px 0;
+}
+
+#endButtons button {
+    width: 90%;
+    max-width: 350px;
+}
+
+/* Modal overlay */
+#modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    padding-left: max(15px, env(safe-area-inset-left));
+    padding-right: max(15px, env(safe-area-inset-right));
+    overflow-y: auto;
+}
+
+#modal.open {
+    display: flex;
+}
+
+#modalBox {
+    background: #222;
+    border-radius: 14px;
+    padding: 24px;
+    max-width: 400px;
+    width: 100%;
+    text-align: left;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#modalBox h3 {
+    margin: 0 0 16px 0;
+    font-size: 20px;
+    text-align: center;
+}
+
+#modalList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+    overflow-y: auto;
+    max-height: 60vh;
+    padding-right: 8px;
+}
+
+#modalList li {
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+    font-size: 14px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+#modalList li:last-child {
+    border-bottom: none;
+}
+
+.impostor-label {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+#modalClose {
+    width: 100%;
+    background: #f39c12;
+    color: black;
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    margin-top: 16px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Scroll bar styling */
+#modalList::-webkit-scrollbar {
+    width: 6px;
+}
+
+#modalList::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 3px;
+}
+
+#modalList::-webkit-scrollbar-thumb {
+    background: #444;
+    border-radius: 3px;
+}
+
+#modalList::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Tablet (768px and up) */
 @media (min-width: 768px) {
     body {
-        padding:20px;
+        padding: 20px;
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
     }
 
-    button, #setup input, #setup select {
-        width:80%;
-        max-width:400px;
+    h1 {
+        font-size: 32px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    input, select {
+        font-size: 18px;
+        padding: 14px;
+        width: 85%;
+        max-width: 400px;
+    }
+
+    button {
+        font-size: 18px;
+        padding: 14px;
+        width: 85%;
+        max-width: 400px;
     }
 
     .card {
-        padding:60px 30px;
+        padding: 40px 30px;
+        width: 85%;
+        max-width: 420px;
+        min-height: 140px;
+        font-size: 20px;
+    }
+
+    #game {
+        max-width: 500px;
+    }
+
+    #setup {
+        max-width: 500px;
+    }
+
+    #endButtons button {
+        width: 85%;
+        max-width: 400px;
+    }
+}
+
+/* Desktop (1024px and up) */
+@media (min-width: 1024px) {
+    body {
+        padding: 30px;
+    }
+
+    input, select, button {
+        font-size: 18px;
+        max-width: 450px;
+    }
+
+    .card {
+        max-width: 480px;
+    }
+}
+
+/* Landscape mode */
+@media (max-height: 600px) and (orientation: landscape) {
+    body {
+        padding: 10px;
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+        padding-top: max(10px, env(safe-area-inset-top));
+    }
+
+    h1 {
+        margin: 0 0 10px 0;
+        font-size: 24px;
+    }
+
+    .card {
+        padding: 15px;
+        margin: 10px auto;
+        min-height: 100px;
+    }
+
+    button {
+        padding: 10px;
+        margin: 4px auto;
+    }
+
+    #endButtons {
+        gap: 8px;
     }
 }
 </style>
@@ -256,7 +429,6 @@ button:hover{
 <div id="setup">
 <h3>Număr jucători</h3>
 <input type="number" id="playerCount" value="10" min="3">
-<br>
 <button onclick="createInputs()">Introdu nume</button>
 
 <div id="players"></div>
@@ -274,11 +446,10 @@ button:hover{
 <h3>Timp (minute)</h3>
 <input type="number" id="roundTimer" value="5" min="1">
 
-<br>
 <button onclick="startGame()">Start joc</button>
 </div>
 
-<div id="game" style="display:none;">
+<div id="game">
 
 <h2 id="playerTurn"></h2>
 
@@ -710,7 +881,7 @@ function nextPlayer() {
     document.getElementById("playerTurn").textContent = "Jocul poate începe 🎉";
     document.getElementById("card").style.display = "none";
     document.getElementById("nextBtn").style.display = "none";
-    document.getElementById("timerSection").style.display = "block";
+    document.getElementById("timerSection").classList.add("active");
     document.getElementById("endButtons").style.display = "flex";
     return;
   }
@@ -783,9 +954,9 @@ function newRound() {
   document.getElementById("setup").style.display = "block";
   document.getElementById("game").style.display = "none";
   document.getElementById("card").style.display = "block";
-  document.getElementById("nextBtn").style.display = "inline-block";
+  document.getElementById("nextBtn").style.display = "block";
   document.getElementById("endButtons").style.display = "none";
-  document.getElementById("timerSection").style.display = "none";
+  document.getElementById("timerSection").classList.remove("active");
 }
 
 </script>
