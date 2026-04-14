@@ -93,6 +93,17 @@ button:active {
     transform: scale(0.98);
 }
 
+#langBtn {
+    background: #1a1a3a;
+    border: 1px solid #3366ff;
+    margin-top: 20px;
+}
+
+#langBtn:hover {
+    background: #2a2a4a;
+    border-color: #5588ff;
+}
+
 .card {
     background: #222;
     padding: 30px 20px;
@@ -447,6 +458,8 @@ button:active {
 <input type="number" id="roundTimer" value="5" min="1">
 
 <button onclick="startGame()">Start joc</button>
+
+<button id="langBtn" onclick="toggleLanguage()">🇬🇧 English</button>
 </div>
 
 <div id="game">
@@ -748,6 +761,20 @@ window.addEventListener('click', () => {
   const b = document.getElementById("endSound");
   b.play().then(() => b.pause()).catch(() => {});
 }, { once: true });
+
+/**
+ * Schimbă limba și actualizează interfața
+ */
+function toggleLanguage() {
+  state.language = state.language === "ro" ? "en" : "ro";
+
+  const btn = document.getElementById("langBtn");
+
+  btn.textContent =
+    state.language === "ro"
+      ? "🇬🇧 English"
+      : "🇷🇴 Română";
+}
 
 function createInputs() {
   const count = parseInt(document.getElementById("playerCount").value);
