@@ -12,24 +12,7 @@ body{
     background:#111;
     color:white;
     margin:0;
-    padding:60px 15px 15px;
-}
-
-#langToggle{
-    position:fixed;
-    top:15px;
-    right:15px;
-    z-index:200;
-    background:#222;
-    color:white;
-    border:none;
-    padding:10px 14px;
-    border-radius:8px;
-    cursor:pointer;
-}
-
-#langToggle:hover{
-    background:#333;
+    padding:15px;
 }
 
 button,input,select{
@@ -155,52 +138,52 @@ button:hover{
 
 <body>
 
-<button id="langToggle" type="button" onclick="toggleLanguage()"></button>
-
-<h1 id="title"></h1>
+<h1>🕵️ Detectiv Biblic</h1>
 
 <div id="setup">
-<h3 id="labelPlayers"></h3>
+<h3>Număr jucători</h3>
 <input type="number" id="playerCount" value="10" min="3">
 <br>
-<button id="btnCreateInputs" onclick="createInputs()"></button>
+<button onclick="createInputs()">Introdu nume</button>
 
 <div id="players"></div>
 
-<h3 id="labelImpostors"></h3>
+<h3>Număr profeţi falşi</h3>
 <input type="number" id="impostors" value="2" min="1">
 
-<h3 id="labelCategory"></h3>
+<h3>Categorie joc</h3>
 <select id="category">
-  <option value="characters" id="optCharacters"></option>
-  <option value="events" id="optEvents"></option>
-  <option value="verses" id="optVerses"></option>
+  <option value="characters">Personaje biblice</option>
+  <option value="events">Relatări biblice</option>
+  <option value="verses">Versete biblice</option>
 </select>
 
-<h3 id="labelTimer"></h3>
+<h3>Timp (minute)</h3>
 <input type="number" id="roundTimer" value="5" min="1">
 
 <br>
-<button id="btnStartGame" onclick="startGame()"></button>
+<button onclick="startGame()">Start joc</button>
 </div>
 
 <div id="game" style="display:none;">
 
 <h2 id="playerTurn"></h2>
 
-<div id="card" class="card" onclick="revealRole()"></div>
+<div id="card" class="card" onclick="revealRole()">
+Apasă AICI ca să dezvălui rolul tău
+</div>
 
-<button id="nextBtn" onclick="nextPlayer()"></button>
+<button id="nextBtn" onclick="nextPlayer()">Următorul jucător</button>
 
 <div id="timerSection" style="display:none;">
-<h3 id="labelTimerSection"></h3>
+<h3>⏱ Timer rundă</h3>
 <div id="timer">00:00</div>
-<button id="startTimerBtn" onclick="startTimer()"></button>
+<button id="startTimerBtn" onclick="startTimer()">Start Timp</button>
 </div>
 
 <div id="endButtons">
-<button id="btnRevealAll" onclick="revealAll()"></button>
-<button id="btnNewRound" onclick="newRound()"></button>
+<button onclick="revealAll()">Descoperă toți jucătorii</button>
+<button onclick="newRound()">Începe joc nou</button>
 </div>
 
 </div>
@@ -208,9 +191,9 @@ button:hover{
 <!-- Modal rezultate -->
 <div id="modal">
   <div id="modalBox">
-    <h3 id="modalTitle"></h3>
+    <h3>🔍 Rezultate</h3>
     <ul id="modalList"></ul>
-    <button id="modalClose" onclick="closeModal()"></button>
+    <button id="modalClose" onclick="closeModal()">Închide</button>
   </div>
 </div>
 
@@ -221,198 +204,256 @@ button:hover{
 <script>
 
 const categories = {
-characters: [
-    "Sara",
-    "Rebeca",
-    "Iosua",
-    "Daniel",
-    "Iefta judecătorul",
-    "Samson",
-    "Abigail",
-    "Neemia",
-    "Saul din Tars",
-    "Ioan Botezatorul",
-    "Rut",
-    "Maria mama lui Isus",
-    "Lazăr",
-    "Moise",
-    "Avraam",
-    "Isaac",
-    "Iacov",
-    "Iosif - fiul lui Iacob",
-    "David",
-    "Solomon",
-    "Ilie",
-    "Elisei",
-    "Estera",
-    "Iov",
-    "Ezra",
-    "Maria Magdalena",
-    "Petru",
-    "Pavel",
-    "Timotei",
-    "Manase",
-    "Ahab",
-    "Izabela",
-    "Abel",
-    "Noe",
-    "Faraon",
-    "Iuda Iscarioteanul",
-    "Absalom","Cain",
-    "Lot",
-    "Ghedeon",
-    "Marta",
-    "Toma"
-],
-events: [
-    "Penticosta din 33 e.n.",
-    "Exodul din Egipt",
-    "Căderea Ierihonului",
-    "Arca lui Noe",
-    "Trecerea Mării Roșii",
-    "David și Goliat",
-    "Nașterea lui Isus",
-    "Învierea lui Isus",
-    "Comemorarea morții lui Isus",
-    "Turnul Babel",
-    "Soția lui Lot se face stalp de sare",
-    "Daniel in groapa cu lei",
-    "Isus curăță templul de talhari",
-    "Armaghedon",
-    "Creerea pamantului",
-    "Căderea lui Adam și Eva",
-    "Cain il ucide pe Abel",
-    "Potopul",
-    "Distrugerea Sodomei si Gomorei",
-    "Jertfirea lui Isaac",
-    "Vanzarea lui Iosif in Egipt",
-    "Cele 10 plagi ale Egiptului",
-    "Vitelul de aur",
-    "Sarpele de arama",
-    "Ridicarea lui Ilie la cer",
-    "Botezul lui Isus",
-    "Ispitirea in pustiu",
-    "Predica de pe munte",
-    "Intrarea in Ierusalim",
-    "Rugaciunea din Ghetsimani",
-    "Tradarea lui Iuda",
-    "Convertirea lui Saul",
-    "Botezul eunucului etiopian",
-    "Eliberarea lui Petru din inchisoare"
-],
-verses: [
-"Ioan 3:16",
-"Psalmul 37:29",
-"Matei 5:3",
-"Proverbe 3:5",
-"Filipeni 4:6",
-"Romani 8:38,39",
-"Isaia 41:10",
-"Psalmul 119:105",
-"Matei 6:33",
-"Faptele 20:35",
-"2 Timotei 3:1-5",
-"Daniel 2:44",
-"2 Timotei 3:16, 17",
-"Proverbele 3:5, 6",
-"Matei 28:19, 20",
-"Efeseni 5:22, 23",
-"2 Petru 3:8",
-"Eclesiastul 9:5",
-"Psalmul 83:18",
-"1 Ioan 4:8",
-"Ioan 17:3",
-"Ioan 5:28, 29",
-"Matei 24:14",
-"Romani 5:12",
-"Iacov 4:8",
-"Matei 6:9, 10",
-"Isaia 55:11",
-"Efeseni 5:33",
-"Isaia 65:21-23",
-"Ioan 13:35",
-"Galateni 5:22, 23",
-"Geneza 1:1",
-"Revelatia 21:4"
-]
-};
-
-const translations = {
-  ro: {
-    title: "Detectiv Biblic",
-    playersLabel: "Număr jucători",
-    enterNames: "Introdu nume",
-    impostorsLabel: "Număr profeţi falși",
-    categoryLabel: "Categorie joc",
-    timerLabel: "Timp (minute)",
-    startGame: "Start joc",
-    cardPrompt: "Apasă AICI ca să dezvălui rolul tău",
-    nextPlayer: "Următorul jucător",
-    timerSection: "⏱ Timer rundă",
-    startTimer: "Start Timp",
-    revealAll: "Descoperă toți jucătorii",
-    newRound: "Începe joc nou",
-    modalResults: "🔍 Rezultate",
-    close: "Închide",
-    playerTurnSuffix: ", e rândul tău",
-    ready: "Jocul poate începe 🎉",
-    min3Players: "Minim 3 jucători!",
-    min1Impostor: "Trebuie cel puțin 1 impostor!",
-    revealRoleAlert: "Dezvăluie rolul!",
-    timeUp: "Timpul s-a terminat!",
-    confirmNewRound: "Ești sigur că vrei să începi un joc nou? Jocul curent se va pierde.",
-    playerPlaceholder: "Jucător",
-    languageToggle: "EN",
-    categoryCharacters: "Personaje biblice",
-    categoryEvents: "Relatări biblice",
-    categoryVerses: "Versete biblice",
-    wordRolePrefix: "Este vorba despre: ",
-    impostorText: "Ești un Profet fals 😈"
+  characters: {
+    ro: [
+      "Sara",
+      "Rebeca",
+      "Iosua",
+      "Daniel",
+      "Iefta judecătorul",
+      "Samson",
+      "Abigail",
+      "Neemia",
+      "Saul din Tars",
+      "Ioan Botezatorul",
+      "Rut",
+      "Maria mama lui Isus",
+      "Lazăr",
+      "Moise",
+      "Avraam",
+      "Isaac",
+      "Iacov",
+      "Iosif - fiul lui Iacob",
+      "David",
+      "Solomon",
+      "Ilie",
+      "Elisei",
+      "Estera",
+      "Iov",
+      "Ezra",
+      "Maria Magdalena",
+      "Petru",
+      "Pavel",
+      "Timotei",
+      "Manase",
+      "Ahab",
+      "Izabela",
+      "Abel",
+      "Noe",
+      "Faraon",
+      "Iuda Iscarioteanul",
+      "Absalom",
+      "Cain",
+      "Lot",
+      "Ghedeon",
+      "Marta",
+      "Toma"
+    ],
+    en: [
+      "Sarah",
+      "Rebecca",
+      "Joshua",
+      "Daniel",
+      "Jephthah the Judge",
+      "Samson",
+      "Abigail",
+      "Nehemiah",
+      "Saul of Tarsus",
+      "John the Baptist",
+      "Ruth",
+      "Mary, mother of Jesus",
+      "Lazarus",
+      "Moses",
+      "Abraham",
+      "Isaac",
+      "Jacob",
+      "Joseph - son of Jacob",
+      "David",
+      "Solomon",
+      "Elijah",
+      "Elisha",
+      "Esther",
+      "Job",
+      "Ezra",
+      "Mary Magdalene",
+      "Peter",
+      "Paul",
+      "Timothy",
+      "Manasseh",
+      "Ahab",
+      "Jezebel",
+      "Abel",
+      "Noah",
+      "Pharaoh",
+      "Judas Iscariot",
+      "Absalom",
+      "Cain",
+      "Lot",
+      "Gideon",
+      "Martha",
+      "Thomas"
+    ]
   },
-  en: {
-    title: "Biblical Detective",
-    playersLabel: "Player count",
-    enterNames: "Enter names",
-    impostorsLabel: "Number of false prophets",
-    categoryLabel: "Game category",
-    timerLabel: "Time (minutes)",
-    startGame: "Start game",
-    cardPrompt: "Tap HERE to reveal your role",
-    nextPlayer: "Next player",
-    timerSection: "⏱ Round timer",
-    startTimer: "Start timer",
-    revealAll: "Reveal all players",
-    newRound: "New game",
-    modalResults: "🔍 Results",
-    close: "Close",
-    playerTurnSuffix: ", it's your turn",
-    ready: "Game can start 🎉",
-    min3Players: "Minimum 3 players!",
-    min1Impostor: "There must be at least 1 impostor!",
-    revealRoleAlert: "Reveal your role!",
-    timeUp: "Time is up!",
-    confirmNewRound: "Are you sure you want to start a new game? Current game will be lost.",
-    playerPlaceholder: "Player",
-    languageToggle: "RO",
-    categoryCharacters: "Bible characters",
-    categoryEvents: "Biblical events",
-    categoryVerses: "Bible verses",
-    wordRolePrefix: "It is about: ",
-    impostorText: "You're a false prophet 😈"
+
+  events: {
+    ro: [
+      "Penticosta din 33 e.n.",
+      "Exodul din Egipt",
+      "Căderea Ierihonului",
+      "Arca lui Noe",
+      "Trecerea Mării Roșii",
+      "David și Goliat",
+      "Nașterea lui Isus",
+      "Învierea lui Isus",
+      "Comemorarea morții lui Isus",
+      "Turnul Babel",
+      "Soția lui Lot se face stalp de sare",
+      "Daniel in groapa cu lei",
+      "Isus curăță templul de talhari",
+      "Armaghedon",
+      "Creerea pamantului",
+      "Căderea lui Adam și Eva",
+      "Cain il ucide pe Abel",
+      "Potopul",
+      "Distrugerea Sodomei si Gomorei",
+      "Jertfirea lui Isaac",
+      "Vanzarea lui Iosif in Egipt",
+      "Cele 10 plagi ale Egiptului",
+      "Vitelul de aur",
+      "Sarpele de arama",
+      "Ridicarea lui Ilie la cer",
+      "Botezul lui Isus",
+      "Ispitirea in pustiu",
+      "Predica de pe munte",
+      "Intrarea in Ierusalim",
+      "Rugaciunea din Ghetsimani",
+      "Tradarea lui Iuda",
+      "Convertirea lui Saul",
+      "Botezul eunucului etiopian",
+      "Eliberarea lui Petru din inchisoare"
+    ],
+    en: [
+      "Pentecost in 33 AD",
+      "The Exodus from Egypt",
+      "The Fall of Jericho",
+      "Noah's Ark",
+      "Crossing the Red Sea",
+      "David and Goliath",
+      "The Birth of Jesus",
+      "The Resurrection of Jesus",
+      "The Crucifixion of Jesus",
+      "The Tower of Babel",
+      "Lot's Wife Turns into Salt",
+      "Daniel in the Lion's Den",
+      "Jesus Cleanses the Temple",
+      "Armageddon",
+      "The Creation of the Earth",
+      "The Fall of Adam and Eve",
+      "Cain Kills Abel",
+      "The Great Flood",
+      "The Destruction of Sodom and Gomorrah",
+      "The Sacrifice of Isaac",
+      "Joseph Sold into Egypt",
+      "The Ten Plagues of Egypt",
+      "The Golden Calf",
+      "The Bronze Serpent",
+      "Elijah Taken to Heaven",
+      "The Baptism of Jesus",
+      "The Temptation in the Desert",
+      "The Sermon on the Mount",
+      "Jesus Enters Jerusalem",
+      "The Prayer in Gethsemane",
+      "The Betrayal of Judas",
+      "The Conversion of Saul",
+      "The Baptism of the Ethiopian Eunuch",
+      "Peter's Deliverance from Prison"
+    ]
+  },
+
+  verses: {
+    ro: [
+      "Ioan 3:16",
+      "Psalmul 37:29",
+      "Matei 5:3",
+      "Proverbe 3:5",
+      "Filipeni 4:6",
+      "Romani 8:38,39",
+      "Isaia 41:10",
+      "Psalmul 119:105",
+      "Matei 6:33",
+      "Faptele 20:35",
+      "2 Timotei 3:1-5",
+      "Daniel 2:44",
+      "2 Timotei 3:16, 17",
+      "Proverbele 3:5, 6",
+      "Matei 28:19, 20",
+      "Efeseni 5:22, 23",
+      "2 Petru 3:8",
+      "Eclesiastul 9:5",
+      "Psalmul 83:18",
+      "1 Ioan 4:8",
+      "Ioan 17:3",
+      "Ioan 5:28, 29",
+      "Matei 24:14",
+      "Romani 5:12",
+      "Iacov 4:8",
+      "Matei 6:9, 10",
+      "Isaia 55:11",
+      "Efeseni 5:33",
+      "Isaia 65:21-23",
+      "Ioan 13:35",
+      "Galateni 5:22, 23",
+      "Geneza 1:1",
+      "Revelatia 21:4"
+    ],
+    en: [
+      "John 3:16",
+      "Psalm 37:29",
+      "Matthew 5:3",
+      "Proverbs 3:5",
+      "Philippians 4:6",
+      "Romans 8:38,39",
+      "Isaiah 41:10",
+      "Psalm 119:105",
+      "Matthew 6:33",
+      "Acts 20:35",
+      "2 Timothy 3:1-5",
+      "Daniel 2:44",
+      "2 Timothy 3:16, 17",
+      "Proverbs 3:5, 6",
+      "Matthew 28:19, 20",
+      "Ephesians 5:22, 23",
+      "2 Peter 3:8",
+      "Ecclesiastes 9:5",
+      "Psalm 83:18",
+      "1 John 4:8",
+      "John 17:3",
+      "John 5:28, 29",
+      "Matthew 24:14",
+      "Romans 5:12",
+      "James 4:8",
+      "Matthew 6:9, 10",
+      "Isaiah 55:11",
+      "Ephesians 5:33",
+      "Isaiah 65:21-23",
+      "John 13:35",
+      "Galatians 5:22, 23",
+      "Genesis 1:1",
+      "Revelation 21:4"
+    ]
   }
 };
 
-// Stare centralizată cu track clar de roluri per jucător
+// Stare centralizată
 const state = {
   players: [],
-  isImpostorByIndex: [], // Array boolean: true = impostor, false = regular player
+  roles: [],
   currentPlayer: 0,
   revealed: false,
   timerInterval: null,
   roundMinutes: 5,
   timeLeft: 0,
   lastImpostors: [],
-  word: "",
   language: "ro"
 };
 
@@ -428,7 +469,7 @@ function createInputs() {
   const count = parseInt(document.getElementById("playerCount").value);
 
   if (isNaN(count) || count < 3) {
-    alert(translations[state.language].min3Players);
+    alert("Minim 3 jucători!");
     return;
   }
 
@@ -443,7 +484,7 @@ function createInputs() {
   for (let i = 0; i < count; i++) {
     const input = document.createElement("input");
     input.id = "p" + i;
-    input.placeholder = `${translations[state.language].playerPlaceholder} ${i + 1}`;
+    input.placeholder = "Jucător " + (i + 1);
     input.value = old[i] || "";
     div.appendChild(input);
     div.appendChild(document.createElement("br"));
@@ -457,104 +498,34 @@ function shuffle(a) {
   }
 }
 
-function setLanguage(lang) {
-  state.language = lang;
-  document.documentElement.lang = lang;
-  const t = translations[lang];
-
-  document.title = t.title;
-  document.getElementById("title").textContent = `🕵️ ${t.title}`;
-  document.getElementById("labelPlayers").textContent = t.playersLabel;
-  document.getElementById("btnCreateInputs").textContent = t.enterNames;
-  document.getElementById("labelImpostors").textContent = t.impostorsLabel;
-  document.getElementById("labelCategory").textContent = t.categoryLabel;
-  document.getElementById("labelTimer").textContent = t.timerLabel;
-  document.getElementById("btnStartGame").textContent = t.startGame;
-  document.getElementById("labelTimerSection").textContent = t.timerSection;
-  document.getElementById("startTimerBtn").textContent = t.startTimer;
-  document.getElementById("btnRevealAll").textContent = t.revealAll;
-  document.getElementById("btnNewRound").textContent = t.newRound;
-  document.getElementById("modalTitle").textContent = t.modalResults;
-  document.getElementById("modalClose").textContent = t.close;
-  document.getElementById("langToggle").textContent = t.languageToggle;
-
-  document.getElementById("optCharacters").textContent = t.categoryCharacters;
-  document.getElementById("optEvents").textContent = t.categoryEvents;
-  document.getElementById("optVerses").textContent = t.categoryVerses;
-
-  updatePlayerPlaceholders();
-
-  // Dacă jocul este în progres, actualizează cardurile și textele
-  if (state.word && state.players.length > 0) {
-    if (!state.revealed) {
-      document.getElementById("card").textContent = t.cardPrompt;
-    } else {
-      // Regenerează textul cardului curent cu limba nouă
-      document.getElementById("card").textContent = getRoleText(state.currentPlayer);
-    }
-    
-    // Reîncarcă turnul dacă e valid
-    if (state.currentPlayer < state.players.length) {
-      updateTurn();
-    } else if (state.currentPlayer >= state.players.length) {
-      document.getElementById("playerTurn").textContent = t.ready;
-    }
-  } else {
-    document.getElementById("card").textContent = t.cardPrompt;
-  }
-}
-
-function toggleLanguage() {
-  setLanguage(state.language === "ro" ? "en" : "ro");
-}
-
-function updatePlayerPlaceholders() {
-  const inputs = document.querySelectorAll("#players input");
-  inputs.forEach((input, index) => {
-    input.placeholder = `${translations[state.language].playerPlaceholder} ${index + 1}`;
-  });
-}
-
-/**
- * Obține textul rolului pentru jucătorul la index dat
- * în limba curentă, fără a modifica starea
- */
-function getRoleText(playerIndex) {
-  const t = translations[state.language];
-  if (state.isImpostorByIndex[playerIndex]) {
-    return t.impostorText;
-  } else {
-    return t.wordRolePrefix + state.word;
-  }
-}
-
 function startGame() {
   const count = parseInt(document.getElementById("playerCount").value);
   const impostorCount = parseInt(document.getElementById("impostors").value);
 
+  // Validări
   if (isNaN(count) || count < 3) {
-    alert(translations[state.language].min3Players);
+    alert("Minim 3 jucători!");
     return;
   }
   if (isNaN(impostorCount) || impostorCount < 1) {
-    alert(translations[state.language].min1Impostor);
+    alert("Trebuie cel puțin 1 impostor!");
     return;
   }
 
   state.players = [];
   for (let i = 0; i < count; i++) {
     const el = document.getElementById("p" + i);
-    state.players.push(el ? (el.value.trim() || `${translations[state.language].playerPlaceholder} ${i + 1}`) : `${translations[state.language].playerPlaceholder} ${i + 1}`);
+    state.players.push(el ? (el.value.trim() || "Jucător " + (i + 1)) : "Jucător " + (i + 1));
   }
 
   state.roundMinutes = parseInt(document.getElementById("roundTimer").value) || 5;
 
   const selectedCategory = document.getElementById("category").value;
-  const list = categories[selectedCategory];
-  state.word = list[Math.floor(Math.random() * list.length)];
+  const list = categories[selectedCategory][state.language];
+  const word = list[Math.floor(Math.random() * list.length)];
 
-  // Inițializează array boolean pentru impostori (toți sunt regular players inițial)
-  state.isImpostorByIndex = state.players.map(() => false);
+  const wordPrefix = state.language === "ro" ? "Este vorba despre: " : "It is about: ";
+  state.roles = state.players.map(() => wordPrefix + word);
 
   const impostorSlots = Math.min(impostorCount, state.players.length);
 
@@ -571,18 +542,14 @@ function startGame() {
     eligible = [...eligible, ...rest];
   }
 
-  // SHUFFLE doar pentru alegerea impostorilor
   shuffle(eligible);
   const chosen = eligible.slice(0, impostorSlots);
   
-  // Marcheaza impostori pe index, fara shuffle pe roles
-  chosen.forEach(p => { 
-    state.isImpostorByIndex[p.i] = true;
-  });
+  const impostorText = state.language === "ro" ? "Ești un Profet fals 😈" : "You're a false prophet 😈";
+  chosen.forEach(p => { state.roles[p.i] = impostorText; });
   state.lastImpostors = chosen.map(p => p.name);
 
-  // NU shuffle state.isImpostorByIndex!
-  // Impostori raman la index-urile lor aleși
+  shuffle(state.roles);
 
   document.getElementById("setup").style.display = "none";
   document.getElementById("game").style.display = "block";
@@ -591,25 +558,24 @@ function startGame() {
   state.revealed = false;
 
   updateTurn();
-  document.getElementById("card").textContent = translations[state.language].cardPrompt;
 }
 
 function updateTurn() {
   document.getElementById("playerTurn").textContent =
-    state.players[state.currentPlayer] + translations[state.language].playerTurnSuffix;
+    state.players[state.currentPlayer] + ", e rândul tău";
 }
 
 function revealRole() {
   if (state.revealed) return;
 
   const card = document.getElementById("card");
-  card.textContent = getRoleText(state.currentPlayer);
+  card.textContent = state.roles[state.currentPlayer];
 
-  if (state.isImpostorByIndex[state.currentPlayer]) {
+  const profetCheck = state.language === "ro" ? "Profet" : "prophet";
+  if (state.roles[state.currentPlayer].includes(profetCheck))
     card.classList.add("impostor");
-  } else {
+  else
     card.classList.add("flipped");
-  }
 
   document.getElementById("dramaticSound").play().catch(() => {});
   state.revealed = true;
@@ -617,19 +583,19 @@ function revealRole() {
 
 function nextPlayer() {
   if (!state.revealed) {
-    alert(translations[state.language].revealRoleAlert);
+    alert("Dezvăluie rolul!");
     return;
   }
 
   const card = document.getElementById("card");
   card.classList.remove("flipped", "impostor");
-  card.textContent = translations[state.language].cardPrompt;
+  card.textContent = "Apasă AICI ca să dezvălui rolul tău";
 
   state.revealed = false;
   state.currentPlayer++;
 
   if (state.currentPlayer >= state.players.length) {
-    document.getElementById("playerTurn").textContent = translations[state.language].ready;
+    document.getElementById("playerTurn").textContent = "Jocul poate începe 🎉";
     document.getElementById("card").style.display = "none";
     document.getElementById("nextBtn").style.display = "none";
     document.getElementById("timerSection").style.display = "block";
@@ -662,7 +628,7 @@ function startTimer() {
       clearInterval(state.timerInterval);
       timerEl.classList.add("expired");
       document.getElementById("endSound").play().catch(() => {});
-      alert(translations[state.language].timeUp);
+      alert("Timpul s-a terminat!");
     }
   }, 1000);
 }
@@ -673,9 +639,9 @@ function revealAll() {
 
   state.players.forEach((p, i) => {
     const li = document.createElement("li");
-    const roleText = getRoleText(i);
-    const isImpostor = state.isImpostorByIndex[i];
-    li.innerHTML = `<strong>${p}</strong> → <span class="${isImpostor ? 'impostor-label' : ''}">${roleText}</span>`;
+    const profetCheck = state.language === "ro" ? "Profet" : "prophet";
+    const isImpostor = state.roles[i].includes(profetCheck);
+    li.innerHTML = `<strong>${p}</strong> → <span class="${isImpostor ? 'impostor-label' : ''}">${state.roles[i]}</span>`;
     list.appendChild(li);
   });
 
@@ -686,12 +652,13 @@ function closeModal() {
   document.getElementById("modal").classList.remove("open");
 }
 
+// Închide modal dacă se apasă în afara lui
 document.getElementById("modal").addEventListener("click", function(e) {
   if (e.target === this) closeModal();
 });
 
 function newRound() {
-  if (!confirm(translations[state.language].confirmNewRound)) return;
+  if (!confirm("Ești sigur că vrei să începi un joc nou? Jocul curent se va pierde.")) return;
 
   clearInterval(state.timerInterval);
 
@@ -707,10 +674,7 @@ function newRound() {
   document.getElementById("nextBtn").style.display = "inline-block";
   document.getElementById("endButtons").style.display = "none";
   document.getElementById("timerSection").style.display = "none";
-  document.getElementById("card").textContent = translations[state.language].cardPrompt;
 }
-
-setLanguage(state.language);
 
 </script>
 </body>
