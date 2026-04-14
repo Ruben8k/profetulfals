@@ -221,7 +221,6 @@ button:hover{
 <script>
 
 const categories = {
-
 characters: [
     "Sara",
     "Rebeca",
@@ -265,7 +264,6 @@ characters: [
     "Marta",
     "Toma"
 ],
-
 events: [
     "Penticosta din 33 e.n.",
     "Exodul din Egipt",
@@ -302,7 +300,6 @@ events: [
     "Botezul eunucului etiopian",
     "Eliberarea lui Petru din inchisoare"
 ],
-
 verses: [
 "Ioan 3:16",
 "Psalmul 37:29",
@@ -338,7 +335,6 @@ verses: [
 "Geneza 1:1",
 "Revelatia 21:4"
 ]
-
 };
 
 const translations = {
@@ -406,9 +402,10 @@ const translations = {
   }
 };
 
+// Stare centralizată cu track clar de roluri per jucător
 const state = {
   players: [],
-  roles: [],
+  isImpostorByIndex: [], // Array boolean: true = impostor, false = regular player
   currentPlayer: 0,
   revealed: false,
   timerInterval: null,
@@ -487,20 +484,23 @@ function setLanguage(lang) {
 
   updatePlayerPlaceholders();
 
-  if (state.revealed && state.roles[state.currentPlayer]) {
-    document.getElementById("card").textContent = state.roles[state.currentPlayer].text;
+  // Dacă jocul este în progres, actualizează cardurile și textele
+  if (state.word && state.players.length > 0) {
+    if (!state.revealed) {
+      document.getElementById("card").textContent = t.cardPrompt;
+    } else {
+      // Regenerează textul cardului curent cu limba nouă
+      document.getElementById("card").textContent = getRoleText(state.currentPlayer);
+    }
+    
+    // Reîncarcă turnul dacă e valid
+    if (state.currentPlayer < state.players.length) {
+      updateTurn();
+    } else if (state.currentPlayer >= state.players.length) {
+      document.getElementById("playerTurn").textContent = t.ready;
+    }
   } else {
     document.getElementById("card").textContent = t.cardPrompt;
-  }
-
-  if (state.players.length && state.currentPlayer < state.players.length) {
-    updateTurn();
-  } else if (state.currentPlayer >= state.players.length) {
-    document.getElementById("playerTurn").textContent = t.ready;
-  }
-
-  if (state.word) {
-    localizeRoles();
   }
 }
 
@@ -515,12 +515,17 @@ function updatePlayerPlaceholders() {
   });
 }
 
-function localizeRoles() {
-  state.roles.forEach(role => {
-    role.text = role.isImpostor
-      ? translations[state.language].impostorText
-      : translations[state.language].wordRolePrefix + state.word;
-  });
+/**
+ * Obține textul rolului pentru jucătorul la index dat
+ * în limba curentă, fără a modifica starea
+ */
+function getRoleText(playerIndex) {
+  const t = translations[state.language];
+  if (state.isImpostorByIndex[playerIndex]) {
+    return t.impostorText;
+  } else {
+    return t.wordRolePrefix + state.word;
+  }
 }
 
 function startGame() {
@@ -546,17 +551,19 @@ function startGame() {
 
   const selectedCategory = document.getElementById("category").value;
   const list = categories[selectedCategory];
-  const word = list[Math.floor(Math.random() * list.length)];
+  state.word = list[Math.floor(Math.random() * list.length)];
 
-  state.word = word;
-  state.roles = state.players.map(() => ({ text: "", isImpostor: false }));
+  // Inițializează array boolean pentru impostori (toți sunt regular players inițial)
+  state.isImpostorByIndex = state.players.map(() => false);
 
   const impostorSlots = Math.min(impostorCount, state.players.length);
 
+  // Candidati care nu au fost impostori runda trecuta
   let eligible = state.players
     .map((name, i) => ({ name, i }))
     .filter(p => !state.lastImpostors.includes(p.name));
 
+  // Daca nu sunt destui candidati eligibili, completam cu restul
   if (eligible.length < impostorSlots) {
     const rest = state.players
       .map((name, i) => ({ name, i }))
@@ -564,13 +571,18 @@ function startGame() {
     eligible = [...eligible, ...rest];
   }
 
+  // SHUFFLE doar pentru alegerea impostorilor
   shuffle(eligible);
   const chosen = eligible.slice(0, impostorSlots);
-  chosen.forEach(p => { state.roles[p.i].isImpostor = true; });
+  
+  // Marcheaza impostori pe index, fara shuffle pe roles
+  chosen.forEach(p => { 
+    state.isImpostorByIndex[p.i] = true;
+  });
   state.lastImpostors = chosen.map(p => p.name);
 
-  localizeRoles();
-  shuffle(state.roles);
+  // NU shuffle state.isImpostorByIndex!
+  // Impostori raman la index-urile lor aleși
 
   document.getElementById("setup").style.display = "none";
   document.getElementById("game").style.display = "block";
@@ -591,13 +603,13 @@ function revealRole() {
   if (state.revealed) return;
 
   const card = document.getElementById("card");
-  const currentRole = state.roles[state.currentPlayer];
-  card.textContent = currentRole.text;
+  card.textContent = getRoleText(state.currentPlayer);
 
-  if (currentRole.isImpostor)
+  if (state.isImpostorByIndex[state.currentPlayer]) {
     card.classList.add("impostor");
-  else
+  } else {
     card.classList.add("flipped");
+  }
 
   document.getElementById("dramaticSound").play().catch(() => {});
   state.revealed = true;
@@ -661,8 +673,9 @@ function revealAll() {
 
   state.players.forEach((p, i) => {
     const li = document.createElement("li");
-    const role = state.roles[i];
-    li.innerHTML = `<strong>${p}</strong> → <span class="${role.isImpostor ? 'impostor-label' : ''}">${role.text}</span>`;
+    const roleText = getRoleText(i);
+    const isImpostor = state.isImpostorByIndex[i];
+    li.innerHTML = `<strong>${p}</strong> → <span class="${isImpostor ? 'impostor-label' : ''}">${roleText}</span>`;
     list.appendChild(li);
   });
 
