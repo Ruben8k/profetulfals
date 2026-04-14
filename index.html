@@ -1,18 +1,15 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Detectiv Biblic</title>
-
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Detectiv Biblic</title>
+  <style>
 body{
-    font-family:Arial;
+    font-family: 'Segoe UI', sans-serif;
     text-align:center;
-    background:#111;
+    background: linear-gradient(135deg, #1a1a1a, #2c3e50);
     color:white;
-    margin:0;
-    padding:15px;
 }
 
 button,input,select{
@@ -24,41 +21,74 @@ button,input,select{
 }
 
 button{
-    background:#222;
+    background: linear-gradient(135deg, #3498db, #2980b9);
     color:white;
     width:85%;
     max-width:350px;
     cursor:pointer;
+    border:none;
+    border-radius:12px;
+    font-weight:bold;
+    transition:0.3s;
 }
 
 button:hover{
-    background:#333;
+    transform: scale(1.05);
+    background: linear-gradient(135deg, #2980b9, #1f6391);
 }
 
-.card{
-    background:#222;
-    padding:40px;
-    margin:25px auto;
-    border-radius:12px;
-    max-width:380px;
-    cursor:pointer;
-    transition:.6s;
+.card {
+  perspective: 1000px;
 }
 
-.flipped{
-    background:#f39c12;
-    color:black;
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 200%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
 }
 
-.impostor{
-    background:#e74c3c!important;
-    color:white!important;
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  font-size: 22px;
+  padding: 20px;
+}
+
+.card-front {
+  background: #1e1e1e;
+}
+
+.card-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(135deg, #f39c12, #f1c40f);
+  color: black;
+}
+
+.card.impostor .card-back {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.card:hover{
+    transform: scale(1.03);
 }
 
 #timer{
-    font-size:28px;
+    font-size:40px;
+    font-weight:bold;
     margin-top:10px;
-    display:none;
 }
 
 #timer.expired{
@@ -71,7 +101,6 @@ button:hover{
     align-items:center;
 }
 
-/* Modal overlay */
 #modal{
     display:none;
     position:fixed;
@@ -87,12 +116,10 @@ button:hover{
 }
 
 #modalBox{
-    background:#222;
-    border-radius:14px;
-    padding:28px 24px;
-    max-width:360px;
-    width:90%;
-    text-align:left;
+    background:#1e1e1e;
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.7);
 }
 
 #modalBox h3{
@@ -133,9 +160,20 @@ button:hover{
     cursor:pointer;
     border:none;
 }
-</style>
-</head>
 
+body.characters {
+  background: linear-gradient(135deg, #2c3e50, #4ca1af);
+}
+
+body.events {
+  background: linear-gradient(135deg, #8e44ad, #c0392b);
+}
+
+body.verses {
+  background: linear-gradient(135deg, #16a085, #f4d03f);
+}
+  </style>
+</head>
 <body>
 
 <h1>🕵️ Detectiv Biblic</h1>
@@ -169,8 +207,13 @@ button:hover{
 
 <h2 id="playerTurn"></h2>
 
-<div id="card" class="card" onclick="revealRole()">
-Apasă AICI ca să dezvălui rolul tău
+<div class="card" onclick="revealRole()">
+  <div class="card-inner" id="cardInner">
+    <div class="card-front">
+      Apasă AICI ca să dezvălui rolul tău
+    </div>
+    <div class="card-back" id="cardBack"></div>
+  </div>
 </div>
 
 <button id="nextBtn" onclick="nextPlayer()">Următorul jucător</button>
@@ -188,7 +231,6 @@ Apasă AICI ca să dezvălui rolul tău
 
 </div>
 
-<!-- Modal rezultate -->
 <div id="modal">
   <div id="modalBox">
     <h3>🔍 Rezultate</h3>
@@ -197,134 +239,46 @@ Apasă AICI ca să dezvălui rolul tău
   </div>
 </div>
 
-<!-- AUDIO LOCAL -->
-<audio id="dramaticSound" src="sounds/dramatic.mp3"></audio>
 <audio id="endSound" src="sounds/final.mp3"></audio>
+<audio id="dramaticSound" src="sounds/dramatic.mp3"></audio>
 
 <script>
-
 const categories = {
 
 characters: [
-    "Sara",
-    "Rebeca",
-    "Iosua",
-    "Daniel",
-    "Iefta judecătorul",
-    "Samson",
-    "Abigail",
-    "Neemia",
-    "Saul din Tars",
-    "Ioan Botezatorul",
-    "Rut",
-    "Maria mama lui Isus",
-    "Lazăr",
-    "Moise",
-    "Avraam",
-    "Isaac",
-    "Iacov",
-    "Iosif - fiul lui Iacob",
-    "David",
-    "Solomon",
-    "Ilie",
-    "Elisei",
-    "Estera",
-    "Iov",
-    "Ezra",
-    "Maria Magdalena",
-    "Petru",
-    "Pavel",
-    "Timotei",
-    "Manase",
-    "Ahab",
-    "Izabela",
-    "Abel",
-    "Noe",
-    "Faraon",
-    "Iuda Iscarioteanul",
-    "Absalom","Cain",
-    "Lot",
-    "Ghedeon",
-    "Marta",
-    "Toma"
+    "Sara","Rebeca","Iosua","Daniel","Iefta judecătorul","Samson","Abigail","Neemia",
+    "Saul din Tars","Ioan Botezatorul","Rut","Maria mama lui Isus","Lazăr","Moise",
+    "Avraam","Isaac","Iacov","Iosif - fiul lui Iacob","David","Solomon","Ilie","Elisei",
+    "Estera","Iov","Ezra","Maria Magdalena","Petru","Pavel","Timotei","Manase","Ahab",
+    "Izabela","Abel","Noe","Faraon","Iuda Iscarioteanul","Absalom","Cain","Lot","Ghedeon","Marta","Toma"
 ],
 
 events: [
-    "Penticosta din 33 e.n.",
-    "Exodul din Egipt",
-    "Căderea Ierihonului",
-    "Arca lui Noe",
-    "Trecerea Mării Roșii",
-    "David și Goliat",
-    "Nașterea lui Isus",
-    "Învierea lui Isus",
-    "Comemorarea morții lui Isus",
-    "Turnul Babel",
-    "Soția lui Lot se face stalp de sare",
-    "Daniel in groapa cu lei",
-    "Isus curăță templul de talhari",
-    "Armaghedon",
-    "Creerea pamantului",
-    "Căderea lui Adam și Eva",
-    "Cain il ucide pe Abel",
-    "Potopul",
-    "Distrugerea Sodomei si Gomorei",
-    "Jertfirea lui Isaac",
-    "Vanzarea lui Iosif in Egipt",
-    "Cele 10 plagi ale Egiptului",
-    "Vitelul de aur",
-    "Sarpele de arama",
-    "Ridicarea lui Ilie la cer",
-    "Botezul lui Isus",
-    "Ispitirea in pustiu",
-    "Predica de pe munte",
-    "Intrarea in Ierusalim",
-    "Rugaciunea din Ghetsimani",
-    "Tradarea lui Iuda",
-    "Convertirea lui Saul",
-    "Botezul eunucului etiopian",
+    "Penticosta din 33 e.n.","Exodul din Egipt","Căderea Ierihonului","Arca lui Noe",
+    "Trecerea Mării Roșii","David și Goliat","Nașterea lui Isus","Învierea lui Isus",
+    "Comemorarea morții lui Isus","Turnul Babel","Soția lui Lot se face stalp de sare",
+    "Daniel in groapa cu lei","Isus curăță templul de talhari","Armaghedon",
+    "Creerea pamantului","Căderea lui Adam și Eva","Cain il ucide pe Abel","Potopul",
+    "Distrugerea Sodomei si Gomorei","Jertfirea lui Isaac","Vanzarea lui Iosif in Egipt",
+    "Cele 10 plagi ale Egiptului","Vitelul de aur","Sarpele de arama",
+    "Ridicarea lui Ilie la cer","Botezul lui Isus","Ispitirea in pustiu",
+    "Predica de pe munte","Intrarea in Ierusalim","Rugaciunea din Ghetsimani",
+    "Tradarea lui Iuda","Convertirea lui Saul","Botezul eunucului etiopian",
     "Eliberarea lui Petru din inchisoare"
 ],
 
 verses: [
-"Ioan 3:16",
-"Psalmul 37:29",
-"Matei 5:3",
-"Proverbe 3:5",
-"Filipeni 4:6",
-"Romani 8:38,39",
-"Isaia 41:10",
-"Psalmul 119:105",
-"Matei 6:33",
-"Faptele 20:35",
-"2 Timotei 3:1-5",
-"Daniel 2:44",
-"2 Timotei 3:16, 17",
-"Proverbele 3:5, 6",
-"Matei 28:19, 20",
-"Efeseni 5:22, 23",
-"2 Petru 3:8",
-"Eclesiastul 9:5",
-"Psalmul 83:18",
-"1 Ioan 4:8",
-"Ioan 17:3",
-"Ioan 5:28, 29",
-"Matei 24:14",
-"Romani 5:12",
-"Iacov 4:8",
-"Matei 6:9, 10",
-"Isaia 55:11",
-"Efeseni 5:33",
-"Isaia 65:21-23",
-"Ioan 13:35",
-"Galateni 5:22, 23",
-"Geneza 1:1",
-"Revelatia 21:4"
+    "Ioan 3:16","Psalmul 37:29","Matei 5:3","Proverbe 3:5","Filipeni 4:6",
+    "Romani 8:38,39","Isaia 41:10","Psalmul 119:105","Matei 6:33","Faptele 20:35",
+    "2 Timotei 3:1-5","Daniel 2:44","2 Timotei 3:16, 17","Proverbele 3:5, 6",
+    "Matei 28:19, 20","Efeseni 5:22, 23","2 Petru 3:8","Eclesiastul 9:5",
+    "Psalmul 83:18","1 Ioan 4:8","Ioan 17:3","Ioan 5:28, 29","Matei 24:14",
+    "Romani 5:12","Iacov 4:8","Matei 6:9, 10","Isaia 55:11","Efeseni 5:33",
+    "Isaia 65:21-23","Ioan 13:35","Galateni 5:22, 23","Geneza 1:1","Revelatia 21:4"
 ]
 
 };
 
-// Stare centralizată
 const state = {
   players: [],
   roles: [],
@@ -346,11 +300,7 @@ window.addEventListener('click', () => {
 
 function createInputs() {
   const count = parseInt(document.getElementById("playerCount").value);
-
-  if (isNaN(count) || count < 3) {
-    alert("Minim 3 jucători!");
-    return;
-  }
+  if (isNaN(count) || count < 3) { alert("Minim 3 jucători!"); return; }
 
   const div = document.getElementById("players");
   const old = [];
@@ -358,7 +308,6 @@ function createInputs() {
     const el = document.getElementById("p" + i);
     old.push(el ? el.value : "");
   }
-
   div.innerHTML = "";
   for (let i = 0; i < count; i++) {
     const input = document.createElement("input");
@@ -381,15 +330,8 @@ function startGame() {
   const count = parseInt(document.getElementById("playerCount").value);
   const impostorCount = parseInt(document.getElementById("impostors").value);
 
-  // Validări
-  if (isNaN(count) || count < 3) {
-    alert("Minim 3 jucători!");
-    return;
-  }
-  if (isNaN(impostorCount) || impostorCount < 1) {
-    alert("Trebuie cel puțin 1 impostor!");
-    return;
-  }
+  if (isNaN(count) || count < 3) { alert("Minim 3 jucători!"); return; }
+  if (isNaN(impostorCount) || impostorCount < 1) { alert("Trebuie cel puțin 1 impostor!"); return; }
 
   state.players = [];
   for (let i = 0; i < count; i++) {
@@ -403,16 +345,17 @@ function startGame() {
   const list = categories[selectedCategory];
   const word = list[Math.floor(Math.random() * list.length)];
 
+  // Schimba culoarea background-ului dupa categorie
+  document.body.className = selectedCategory;
+
   state.roles = state.players.map(() => "Este vorba despre: " + word);
 
-  const impostorSlots = Math.min(impostorCount, state.players.length);
+  const impostorSlots = Math.min(impostorCount, state.players.length - 1);
 
-  // Candidati care nu au fost impostori runda trecuta
   let eligible = state.players
     .map((name, i) => ({ name, i }))
     .filter(p => !state.lastImpostors.includes(p.name));
 
-  // Daca nu sunt destui candidati eligibili, completam cu restul
   if (eligible.length < impostorSlots) {
     const rest = state.players
       .map((name, i) => ({ name, i }))
@@ -425,7 +368,11 @@ function startGame() {
   chosen.forEach(p => { state.roles[p.i] = "Ești un Profet fals 😈"; });
   state.lastImpostors = chosen.map(p => p.name);
 
-  shuffle(state.roles);
+  // FIX: amestecam jucatorii si rolurile impreuna ca sa ramana sincronizate
+  const combined = state.players.map((name, i) => ({ name, role: state.roles[i] }));
+  shuffle(combined);
+  state.players = combined.map(x => x.name);
+  state.roles = combined.map(x => x.role);
 
   document.getElementById("setup").style.display = "none";
   document.getElementById("game").style.display = "block";
@@ -444,34 +391,34 @@ function updateTurn() {
 function revealRole() {
   if (state.revealed) return;
 
-  const card = document.getElementById("card");
-  card.textContent = state.roles[state.currentPlayer];
+  const card = document.querySelector(".card");
+  const back = document.getElementById("cardBack");
+
+  back.textContent = state.roles[state.currentPlayer];
 
   if (state.roles[state.currentPlayer].includes("Profet"))
     card.classList.add("impostor");
-  else
-    card.classList.add("flipped");
+
+  card.classList.add("flipped");
 
   document.getElementById("dramaticSound").play().catch(() => {});
   state.revealed = true;
 }
 
 function nextPlayer() {
-  if (!state.revealed) {
-    alert("Dezvăluie rolul!");
-    return;
-  }
+  if (!state.revealed) { alert("Dezvăluie rolul!"); return; }
 
-  const card = document.getElementById("card");
+  // FIX: folosim querySelector(".card") in loc de getElementById("card")
+  const card = document.querySelector(".card");
   card.classList.remove("flipped", "impostor");
-  card.textContent = "Apasă AICI ca să dezvălui rolul tău";
+  document.getElementById("cardBack").textContent = "";
 
   state.revealed = false;
   state.currentPlayer++;
 
   if (state.currentPlayer >= state.players.length) {
     document.getElementById("playerTurn").textContent = "Jocul poate începe 🎉";
-    document.getElementById("card").style.display = "none";
+    card.style.display = "none";
     document.getElementById("nextBtn").style.display = "none";
     document.getElementById("timerSection").style.display = "block";
     document.getElementById("endButtons").style.display = "flex";
@@ -492,12 +439,9 @@ function startTimer() {
 
   state.timerInterval = setInterval(() => {
     state.timeLeft--;
-
     const m = Math.floor(state.timeLeft / 60);
     const s = state.timeLeft % 60;
-
-    timerEl.textContent =
-      `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    timerEl.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 
     if (state.timeLeft <= 0) {
       clearInterval(state.timerInterval);
@@ -526,7 +470,6 @@ function closeModal() {
   document.getElementById("modal").classList.remove("open");
 }
 
-// Închide modal dacă se apasă în afara lui
 document.getElementById("modal").addEventListener("click", function(e) {
   if (e.target === this) closeModal();
 });
@@ -544,12 +487,13 @@ function newRound() {
   document.getElementById("startTimerBtn").style.display = "inline-block";
   document.getElementById("setup").style.display = "block";
   document.getElementById("game").style.display = "none";
-  document.getElementById("card").style.display = "block";
+  // FIX: folosim querySelector(".card") in loc de getElementById("card")
+  document.querySelector(".card").style.display = "block";
   document.getElementById("nextBtn").style.display = "inline-block";
   document.getElementById("endButtons").style.display = "none";
   document.getElementById("timerSection").style.display = "none";
 }
-
 </script>
+
 </body>
 </html>
