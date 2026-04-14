@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="ro">
 <head>
@@ -564,13 +565,27 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.9);
+      background-image: url('/mnt/data/a_2d_digital_illustration_serves_as_an_intro_scree.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       z-index: 200;
       transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+
+    #intro::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: -1;
     }
 
     #intro.fade-out {
@@ -581,6 +596,8 @@
     #intro h1 {
       font-size: 36px;
       margin-bottom: 20px;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     }
 
     #intro button {
@@ -592,6 +609,8 @@
       border-radius: 10px;
       cursor: pointer;
       transition: background 0.3s;
+      position: relative;
+      z-index: 1;
     }
 
     #intro button:hover {
@@ -601,6 +620,12 @@
 </head>
 
 <body>
+
+  <!-- Intro Screen -->
+  <div id="intro">
+    <h1>🕵️ Detectiv Biblic</h1>
+    <button onclick="startIntro()">Start</button>
+  </div>
 
   <h1>🕵️ Detectiv Biblic</h1>
 
@@ -1026,7 +1051,7 @@
 
       // Dacă nu e joc în curs, actualizează cardului la starea inițială
       if (state.players.length === 0 || document.getElementById("game").style.display === "none") {
-        document.getElementById("card").textContent = t("cardPrompt");
+        document.getElementById("card").setAttribute('data-text', t("cardPrompt"));
       }
 
       // Reactualizează placeholder-urile input-urilor
@@ -1152,7 +1177,7 @@
       if (state.revealed) return;
 
       const card = document.getElementById("card");
-      card.textContent = state.roles[state.currentPlayer];
+      card.setAttribute('data-text', state.roles[state.currentPlayer]);
 
       const profetCheck = state.language === "ro" ? "Profet" : "prophet";
       if (state.roles[state.currentPlayer].includes(profetCheck))
@@ -1172,7 +1197,7 @@
 
       const card = document.getElementById("card");
       card.classList.remove("flipped", "impostor");
-      card.textContent = "ÎNTOARCE CARTEA";
+      card.setAttribute('data-text', "ÎNTOARCE CARTEA");
 
       state.revealed = false;
       state.currentPlayer++;
@@ -1274,3 +1299,4 @@
   </script>
 </body>
 </html>
+```
