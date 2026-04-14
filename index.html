@@ -1,449 +1,1102 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Detectiv Biblic</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Detectiv Biblic</title>
 
-<style>
-/* ===== CSS EXACT NEMODIFICAT ===== */
-* { box-sizing: border-box; }
-html, body { margin: 0; padding: 0; width: 100%; overflow-x: hidden; }
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  background: #111;
-  color: white;
-  padding: 15px;
-  padding-left: max(15px, env(safe-area-inset-left));
-  padding-right: max(15px, env(safe-area-inset-right));
-  padding-top: max(15px, env(safe-area-inset-top));
-  padding-bottom: max(15px, env(safe-area-inset-bottom));
-  min-height: 100vh;
-}
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
+    }
 
-h1 { margin: 0 0 20px 0; font-size: 28px; padding: 0 10px; }
-h2 { margin: 10px 0; font-size: 20px; padding: 0 10px; word-wrap: break-word; overflow-wrap: break-word; hyphens: auto; }
-h3 { margin: 15px 0 8px 0; font-size: 16px; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #111;
+      color: white;
+      padding: 15px;
+      padding-left: max(15px, env(safe-area-inset-left));
+      padding-right: max(15px, env(safe-area-inset-right));
+      padding-top: max(15px, env(safe-area-inset-top));
+      padding-bottom: max(15px, env(safe-area-inset-bottom));
+      min-height: 100vh;
+    }
 
-input, select, button {
-  font-size: 16px;
-  padding: 12px;
-  margin: 8px auto;
-  border-radius: 8px;
-  border: 1px solid #444;
-  background: #1a1a1a;
-  color: white;
-  width: 90%;
-  max-width: 350px;
-  display: block;
-}
+    h1 {
+      margin: 0 0 20px 0;
+      font-size: 28px;
+      padding: 0 10px;
+    }
 
-button { cursor: pointer; transition: 0.3s; }
-button:hover { background: #333; }
-button:active { transform: scale(0.98); }
+    h2 {
+      margin: 10px 0;
+      font-size: 20px;
+      padding: 0 10px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
 
-#card {
-  background: #1e3a8a;
-  color: white;
-  font-weight: bold;
-}
+    h3 {
+      margin: 15px 0 8px 0;
+      font-size: 16px;
+    }
 
-.card {
-  background: #222;
-  padding: 30px 20px;
-  margin: 20px auto;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 380px;
-  cursor: pointer;
-  transition: all 0.6s ease;
-  min-height: 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-}
+    input, select {
+      font-size: 16px;
+      padding: 12px;
+      margin: 8px auto;
+      border-radius: 8px;
+      border: 1px solid #444;
+      background: #1a1a1a;
+      color: white;
+      width: 90%;
+      max-width: 350px;
+      display: block;
+    }
 
-.flipped { background: #f39c12; color: black; }
-.impostor { background: #e74c3c !important; }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #f39c12;
+      background: #222;
+    }
 
-#timer { font-size: 32px; font-weight: bold; display: none; }
+    button {
+      font-size: 16px;
+      padding: 12px 15px;
+      margin: 8px auto;
+      border-radius: 8px;
+      border: none;
+      background: #222;
+      color: white;
+      width: 90%;
+      max-width: 350px;
+      cursor: pointer;
+      display: block;
+      transition: background 0.3s;
+    }
 
-#game { display: none; }
-#timerSection { display: none; }
-#timerSection.active { display: block; }
-#endButtons { display: none; }
-</style>
+    button:hover {
+      background: #333;
+    }
+
+    button:active {
+      background: #1a1a1a;
+      transform: scale(0.98);
+    }
+
+    #langBtn {
+      background: #1a1a3a;
+      border: 1px solid #3366ff;
+      margin-top: 20px;
+    }
+
+    #langBtn:hover {
+      background: #2a2a4a;
+      border-color: #5588ff;
+    }
+
+    #card {
+      background: #1e3a8a; /* albastru */
+      color: white;
+      font-weight: bold;
+    }
+
+    .card {
+      background: #222;
+      padding: 30px 20px;
+      margin: 20px auto;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 380px;
+      cursor: pointer;
+      transition: all 0.6s ease;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .card:active {
+      transform: scale(0.95);
+    }
+
+    .flipped {
+      background: #f39c12;
+      color: black;
+      font-weight: bold;
+    }
+
+    .impostor {
+      background: #e74c3c !important;
+      color: white !important;
+      font-weight: bold;
+    }
+
+    #timer {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 15px 0;
+      display: none;
+      font-variant-numeric: tabular-nums;
+    }
+
+    #timer.expired {
+      color: #e74c3c;
+      animation: blink 0.5s infinite;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0.5; }
+    }
+
+    #setup {
+      padding: 10px 0;
+      margin: 0 auto;
+      max-width: 400px;
+    }
+
+    #players {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin: 15px 0;
+    }
+
+    #players input {
+      margin: 4px auto;
+    }
+
+    #players br {
+      display: none;
+    }
+
+    #game {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      min-height: 100vh;
+      padding-bottom: 30px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    #playerTurn {
+      width: 100%;
+      padding: 0 10px;
+    }
+
+    #nextBtn {
+      width: 90%;
+      max-width: 350px;
+    }
+
+    #timerSection {
+      display: none !important;
+      width: 100%;
+      text-align: center;
+      padding: 20px 0;
+    }
+
+    #timerSection h3 {
+      margin: 0 0 10px 0;
+    }
+
+    #timerSection.active {
+      display: block !important;
+    }
+
+    #startTimerBtn {
+      width: 90%;
+      max-width: 350px;
+    }
+
+    #endButtons {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 20px 0;
+    }
+
+    #endButtons button {
+      width: 90%;
+      max-width: 350px;
+    }
+
+    /* Modal overlay */
+    #modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      padding-left: max(15px, env(safe-area-inset-left));
+      padding-right: max(15px, env(safe-area-inset-right));
+      overflow-y: auto;
+    }
+
+    #modal.open {
+      display: flex;
+    }
+
+    #modalBox {
+      background: #222;
+      border-radius: 14px;
+      padding: 24px;
+      max-width: 400px;
+      width: 100%;
+      text-align: left;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #modalBox h3 {
+      margin: 0 0 16px 0;
+      font-size: 20px;
+      text-align: center;
+    }
+
+    #modalList {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      flex: 1;
+      overflow-y: auto;
+      max-height: 60vh;
+      padding-right: 8px;
+    }
+
+    #modalList li {
+      padding: 10px 0;
+      border-bottom: 1px solid #333;
+      font-size: 14px;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      hyphens: auto;
+    }
+
+    #modalList li:last-child {
+      border-bottom: none;
+    }
+
+    .impostor-label {
+      color: #e74c3c;
+      font-weight: bold;
+    }
+
+    #modalClose {
+      width: 100%;
+      background: #f39c12;
+      color: black;
+      font-weight: bold;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      margin-top: 16px;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    /* Scroll bar styling */
+    #modalList::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #modalList::-webkit-scrollbar-track {
+      background: #1a1a1a;
+      border-radius: 3px;
+    }
+
+    #modalList::-webkit-scrollbar-thumb {
+      background: #444;
+      border-radius: 3px;
+    }
+
+    #modalList::-webkit-scrollbar-thumb:hover {
+      background: #666;
+    }
+
+    /* Tablet (768px and up) */
+    @media (min-width: 768px) {
+      body {
+        padding: 20px;
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+      }
+
+      h1 {
+        font-size: 32px;
+      }
+
+      h2 {
+        font-size: 24px;
+      }
+
+      input, select {
+        font-size: 18px;
+        padding: 14px;
+        width: 85%;
+        max-width: 400px;
+      }
+
+      button {
+        font-size: 18px;
+        padding: 14px;
+        width: 85%;
+        max-width: 400px;
+      }
+
+      .card {
+        padding: 40px 30px;
+        width: 85%;
+        max-width: 420px;
+        min-height: 140px;
+        font-size: 20px;
+      }
+
+      #game {
+        max-width: 500px;
+      }
+
+      #setup {
+        max-width: 500px;
+      }
+
+      #endButtons button {
+        width: 85%;
+        max-width: 400px;
+      }
+    }
+
+    /* Desktop (1024px and up) */
+    @media (min-width: 1024px) {
+      body {
+        padding: 30px;
+      }
+
+      input, select, button {
+        font-size: 18px;
+        max-width: 450px;
+      }
+
+      .card {
+        max-width: 480px;
+      }
+    }
+
+    /* Landscape mode */
+    @media (max-height: 600px) and (orientation: landscape) {
+      body {
+        padding: 10px;
+        padding-left: max(10px, env(safe-area-inset-left));
+        padding-right: max(10px, env(safe-area-inset-right));
+        padding-top: max(10px, env(safe-area-inset-top));
+      }
+
+      h1 {
+        margin: 0 0 10px 0;
+        font-size: 24px;
+      }
+
+      .card {
+        padding: 15px;
+        margin: 10px auto;
+        min-height: 100px;
+      }
+
+      button {
+        padding: 10px;
+        margin: 4px auto;
+      }
+
+      #endButtons {
+        gap: 8px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<h1 id="appTitle"></h1>
+  <h1>🕵️ Detectiv Biblic</h1>
 
-<div id="setup">
-  <h3 id="labelPlayerCount"></h3>
-  <input type="number" id="playerCount" value="10" min="3">
+  <div id="setup">
+    <h3 id="labelPlayerCount">Număr jucători</h3>
+    <input type="number" id="playerCount" value="10" min="3">
+    <button id="btnCreateInputs" onclick="createInputs()">Introdu nume</button>
 
-  <button id="btnCreateInputs" onclick="createInputs()"></button>
-  <div id="players"></div>
+    <div id="players"></div>
 
-  <h3 id="labelImpostors"></h3>
-  <input type="number" id="impostors" value="2" min="1">
+    <h3 id="labelImpostors">Număr profeţi falşi</h3>
+    <input type="number" id="impostors" value="2" min="1">
 
-  <h3 id="labelCategory"></h3>
-  <select id="category">
-    <option value="characters" id="optCharacters"></option>
-    <option value="events" id="optEvents"></option>
-    <option value="verses" id="optVerses"></option>
-  </select>
+    <h3 id="labelCategory">Categorie joc</h3>
+    <select id="category">
+      <option value="characters" id="optCharacters">Personaje biblice</option>
+      <option value="events" id="optEvents">Relatări biblice</option>
+      <option value="verses" id="optVerses">Versete biblice</option>
+    </select>
 
-  <h3 id="labelTimer"></h3>
-  <input type="number" id="roundTimer" value="5" min="1">
+    <h3 id="labelTimer">Timp (minute)</h3>
+    <input type="number" id="roundTimer" value="5" min="1">
 
-  <button id="btnStartGame" onclick="startGame()"></button>
-  <button id="langBtn" onclick="toggleLanguage()"></button>
-</div>
+    <button id="btnStartGame" onclick="startGame()">Start joc</button>
 
-<div id="game">
-  <h2 id="playerTurn"></h2>
-
-  <div id="card" class="card" onclick="revealRole()"></div>
-
-  <button id="nextBtn" onclick="nextPlayer()"></button>
-
-  <div id="timerSection">
-    <h3 id="labelTimerSection"></h3>
-    <div id="timer">00:00</div>
-    <button id="startTimerBtn" onclick="startTimer()"></button>
+    <button id="langBtn" onclick="toggleLanguage()">🇬🇧 English</button>
   </div>
 
-  <div id="endButtons">
-    <button id="btnRevealAll" onclick="revealAll()"></button>
-    <button id="btnNewRound" onclick="newRound()"></button>
+  <div id="game">
+    <h2 id="playerTurn"></h2>
+
+    <div id="card" class="card" onclick="revealRole()">
+      ÎNTOARCE CARTEA
+    </div>
+
+    <button id="nextBtn" onclick="nextPlayer()">Următorul jucător</button>
+
+    <div id="timerSection">
+      <h3 id="labelTimerSection">⏱ Timer rundă</h3>
+      <div id="timer">00:00</div>
+      <button id="startTimerBtn" onclick="startTimer()">Start Timp</button>
+    </div>
+
+    <div id="endButtons">
+      <button id="btnRevealAll" onclick="revealAll()">Descoperă toți jucătorii</button>
+      <button id="btnNewRound" onclick="newRound()">Începe joc nou</button>
+    </div>
   </div>
-</div>
 
-<div id="modal">
-  <div id="modalBox">
-    <h3 id="modalTitle"></h3>
-    <ul id="modalList"></ul>
-    <button id="modalClose" onclick="closeModal()"></button>
+  <!-- Modal rezultate -->
+  <div id="modal">
+    <div id="modalBox">
+      <h3 id="modalTitle">🔍 Rezultate</h3>
+      <ul id="modalList"></ul>
+      <button id="modalClose" onclick="closeModal()">Închide</button>
+    </div>
   </div>
-</div>
 
-<audio id="dramaticSound" src="sounds/dramatic.mp3"></audio>
-<audio id="endSound" src="sounds/final.mp3"></audio>
+  <!-- AUDIO LOCAL -->
+  <audio id="dramaticSound" src="sounds/dramatic.mp3"></audio>
+  <audio id="endSound" src="sounds/final.mp3"></audio>
 
-<script>
+  <script>
+    // ========== SISTEM I18N (TRADUCERI CENTRALIZATE) ==========
+    const i18n = {
+      ro: {
+        title: "🕵️ Detectiv Biblic",
+        labelPlayerCount: "Număr jucători",
+        btnCreateInputs: "Introdu nume",
+        labelImpostors: "Număr profeţi falşi",
+        labelCategory: "Categorie joc",
+        labelTimer: "Timp (minute)",
+        btnStartGame: "Start joc",
+        optCharacters: "Personaje biblice",
+        optEvents: "Relatări biblice",
+        optVerses: "Versete biblice",
+        cardPrompt: "ÎNTOARCE CARTEA",
+        nextBtn: "Următorul jucător",
+        labelTimerSection: "⏱ Timer rundă",
+        startTimerBtn: "Start Timp",
+        btnRevealAll: "Descoperă toți jucătorii",
+        btnNewRound: "Începe joc nou",
+        modalTitle: "🔍 Rezultate",
+        modalClose: "Închide",
+        playerTurnSuffix: ", e rândul tău",
+        playerReady: "Jocul poate începe 🎉",
+        wordRolePrefix: "Este vorba despre: ",
+        impostorRole: "Ești un Profet fals 😈",
+        langToggle: "🇬🇧 English",
+        alertMin3: "Minim 3 jucători!",
+        alertMin1Impostor: "Trebuie cel puțin 1 impostor!",
+        alertRevealRole: "Dezvăluie rolul!",
+        alertTimeUp: "Timpul s-a terminat!",
+        alertConfirmNewRound: "Ești sigur că vrei să începi un joc nou? Jocul curent se va pierde.",
+        playerPlaceholder: "Jucător"
+      },
 
-/* ================= I18N ================= */
-const i18n = {
-  ro: {
-    title: "🕵️ Detectiv Biblic",
-    labelPlayerCount: "Număr jucători",
-    btnCreateInputs: "Introdu nume",
-    labelImpostors: "Număr profeţi falşi",
-    labelCategory: "Categorie joc",
-    labelTimer: "Timp (minute)",
-    btnStartGame: "Start joc",
-    optCharacters: "Personaje biblice",
-    optEvents: "Relatări biblice",
-    optVerses: "Versete biblice",
-    cardPrompt: "ÎNTOARCE CARTEA",
-    nextBtn: "Următorul jucător",
-    labelTimerSection: "⏱ Timer rundă",
-    startTimerBtn: "Start Timp",
-    btnRevealAll: "Descoperă toți jucătorii",
-    btnNewRound: "Începe joc nou",
-    modalTitle: "🔍 Rezultate",
-    modalClose: "Închide",
-    playerTurnSuffix: ", e rândul tău",
-    playerReady: "Jocul poate începe 🎉",
-    wordRolePrefix: "Este vorba despre: ",
-    impostorRole: "Ești un Profet fals 😈",
-    langToggle: "🇬🇧 English",
-    alertMin3: "Minim 3 jucători!",
-    alertMin1Impostor: "Trebuie cel puțin 1 impostor!",
-    alertRevealRole: "Dezvăluie rolul!",
-    alertTimeUp: "Timpul s-a terminat!",
-    alertConfirmNewRound: "Ești sigur că vrei să începi un joc nou? Jocul curent se va pierde.",
-    playerPlaceholder: "Jucător",
-    playerDefault: "Jucător"
-  },
-  en: {
-    title: "🕵️ Biblical Detective",
-    labelPlayerCount: "Player count",
-    btnCreateInputs: "Enter names",
-    labelImpostors: "Number of false prophets",
-    labelCategory: "Game category",
-    labelTimer: "Time (minutes)",
-    btnStartGame: "Start game",
-    optCharacters: "Bible characters",
-    optEvents: "Biblical events",
-    optVerses: "Bible verses",
-    cardPrompt: "TAP HERE",
-    nextBtn: "Next player",
-    labelTimerSection: "⏱ Round timer",
-    startTimerBtn: "Start timer",
-    btnRevealAll: "Reveal all players",
-    btnNewRound: "New game",
-    modalTitle: "🔍 Results",
-    modalClose: "Close",
-    playerTurnSuffix: ", it's your turn",
-    playerReady: "Game can start 🎉",
-    wordRolePrefix: "It is about: ",
-    impostorRole: "You're a false prophet 😈",
-    langToggle: "🇷🇴 Română",
-    alertMin3: "Minimum 3 players!",
-    alertMin1Impostor: "There must be at least 1 impostor!",
-    alertRevealRole: "Reveal your role!",
-    alertTimeUp: "Time is up!",
-    alertConfirmNewRound: "Are you sure? Current game will be lost.",
-    playerPlaceholder: "Player",
-    playerDefault: "Player"
-  }
-};
+      en: {
+        title: "🕵️ Biblical Detective",
+        labelPlayerCount: "Player count",
+        btnCreateInputs: "Enter names",
+        labelImpostors: "Number of false prophets",
+        labelCategory: "Game category",
+        labelTimer: "Time (minutes)",
+        btnStartGame: "Start game",
+        optCharacters: "Bible characters",
+        optEvents: "Biblical events",
+        optVerses: "Bible verses",
+        cardPrompt: "TAP HERE",
+        nextBtn: "Next player",
+        labelTimerSection: "⏱ Round timer",
+        startTimerBtn: "Start timer",
+        btnRevealAll: "Reveal all players",
+        btnNewRound: "New game",
+        modalTitle: "🔍 Results",
+        modalClose: "Close",
+        playerTurnSuffix: ", it's your turn",
+        playerReady: "Game can start 🎉",
+        wordRolePrefix: "It is about: ",
+        impostorRole: "You're a false prophet 😈",
+        langToggle: "🇷🇴 Română",
+        alertMin3: "Minimum 3 players!",
+        alertMin1Impostor: "There must be at least 1 impostor!",
+        alertRevealRole: "Reveal your role!",
+        alertTimeUp: "Time is up!",
+        alertConfirmNewRound: "Are you sure you want to start a new game? Current game will be lost.",
+        playerPlaceholder: "Player"
+      }
+    };
 
-const state = {
-  players: [],
-  roles: [],
-  currentPlayer: 0,
-  revealed: false,
-  timerInterval: null,
-  roundMinutes: 5,
-  timeLeft: 0,
-  lastImpostors: [],
-  language: "ro"
-};
+    const categories = {
+      characters: {
+        ro: [
+          "Sara",
+          "Rebeca",
+          "Iosua",
+          "Daniel",
+          "Iefta judecătorul",
+          "Samson",
+          "Abigail",
+          "Neemia",
+          "Saul din Tars",
+          "Ioan Botezatorul",
+          "Rut",
+          "Maria mama lui Isus",
+          "Lazăr",
+          "Moise",
+          "Avraam",
+          "Isaac",
+          "Iacov",
+          "Iosif - fiul lui Iacob",
+          "David",
+          "Solomon",
+          "Ilie",
+          "Elisei",
+          "Estera",
+          "Iov",
+          "Ezra",
+          "Maria Magdalena",
+          "Petru",
+          "Pavel",
+          "Timotei",
+          "Manase",
+          "Ahab",
+          "Izabela",
+          "Abel",
+          "Noe",
+          "Faraon",
+          "Iuda Iscarioteanul",
+          "Absalom",
+          "Cain",
+          "Lot",
+          "Ghedeon",
+          "Marta",
+          "Toma"
+        ],
+        en: [
+          "Sarah",
+          "Rebecca",
+          "Joshua",
+          "Daniel",
+          "Jephthah the Judge",
+          "Samson",
+          "Abigail",
+          "Nehemiah",
+          "Saul of Tarsus",
+          "John the Baptist",
+          "Ruth",
+          "Mary, mother of Jesus",
+          "Lazarus",
+          "Moses",
+          "Abraham",
+          "Isaac",
+          "Jacob",
+          "Joseph - son of Jacob",
+          "David",
+          "Solomon",
+          "Elijah",
+          "Elisha",
+          "Esther",
+          "Job",
+          "Ezra",
+          "Mary Magdalene",
+          "Peter",
+          "Paul",
+          "Timothy",
+          "Manasseh",
+          "Ahab",
+          "Jezebel",
+          "Abel",
+          "Noah",
+          "Pharaoh",
+          "Judas Iscariot",
+          "Absalom",
+          "Cain",
+          "Lot",
+          "Gideon",
+          "Martha",
+          "Thomas"
+        ]
+      },
 
-/* ================= HELPER ================= */
-function t(k){ return i18n[state.language][k] || k; }
+      events: {
+        ro: [
+          "Penticosta din 33 e.n.",
+          "Exodul din Egipt",
+          "Căderea Ierihonului",
+          "Arca lui Noe",
+          "Trecerea Mării Roșii",
+          "David și Goliat",
+          "Nașterea lui Isus",
+          "Învierea lui Isus",
+          "Comemorarea morții lui Isus",
+          "Turnul Babel",
+          "Soția lui Lot se face stalp de sare",
+          "Daniel in groapa cu lei",
+          "Isus curăță templul de talhari",
+          "Armaghedon",
+          "Creerea pamantului",
+          "Căderea lui Adam și Eva",
+          "Cain il ucide pe Abel",
+          "Potopul",
+          "Distrugerea Sodomei si Gomorei",
+          "Jertfirea lui Isaac",
+          "Vanzarea lui Iosif in Egipt",
+          "Cele 10 plagi ale Egiptului",
+          "Vitelul de aur",
+          "Sarpele de arama",
+          "Ridicarea lui Ilie la cer",
+          "Botezul lui Isus",
+          "Ispitirea in pustiu",
+          "Predica de pe munte",
+          "Intrarea in Ierusalim",
+          "Rugaciunea din Ghetsimani",
+          "Tradarea lui Iuda",
+          "Convertirea lui Saul",
+          "Botezul eunucului etiopian",
+          "Eliberarea lui Petru din inchisoare"
+        ],
+        en: [
+          "Pentecost in 33 AD",
+          "The Exodus from Egypt",
+          "The Fall of Jericho",
+          "Noah's Ark",
+          "Crossing the Red Sea",
+          "David and Goliath",
+          "The Birth of Jesus",
+          "The Resurrection of Jesus",
+          "The Crucifixion of Jesus",
+          "The Tower of Babel",
+          "Lot's Wife Turns into Salt",
+          "Daniel in the Lion's Den",
+          "Jesus Cleanses the Temple",
+          "Armageddon",
+          "The Creation of the Earth",
+          "The Fall of Adam and Eve",
+          "Cain Kills Abel",
+          "The Great Flood",
+          "The Destruction of Sodom and Gomorrah",
+          "The Sacrifice of Isaac",
+          "Joseph Sold into Egypt",
+          "The Ten Plagues of Egypt",
+          "The Golden Calf",
+          "The Bronze Serpent",
+          "Elijah Taken to Heaven",
+          "The Baptism of Jesus",
+          "The Temptation in the Desert",
+          "The Sermon on the Mount",
+          "Jesus Enters Jerusalem",
+          "The Prayer in Gethsemane",
+          "The Betrayal of Judas",
+          "The Conversion of Saul",
+          "The Baptism of the Ethiopian Eunuch",
+          "Peter's Deliverance from Prison"
+        ]
+      },
 
-/* ================= UI ================= */
-function updateUI(){
-  document.title = t("title");
+      verses: {
+        ro: [
+          "Ioan 3:16",
+          "Psalmul 37:29",
+          "Matei 5:3",
+          "Proverbe 3:5",
+          "Filipeni 4:6",
+          "Romani 8:38,39",
+          "Isaia 41:10",
+          "Psalmul 119:105",
+          "Matei 6:33",
+          "Faptele 20:35",
+          "2 Timotei 3:1-5",
+          "Daniel 2:44",
+          "2 Timotei 3:16, 17",
+          "Proverbele 3:5, 6",
+          "Matei 28:19, 20",
+          "Efeseni 5:22, 23",
+          "2 Petru 3:8",
+          "Eclesiastul 9:5",
+          "Psalmul 83:18",
+          "1 Ioan 4:8",
+          "Ioan 17:3",
+          "Ioan 5:28, 29",
+          "Matei 24:14",
+          "Romani 5:12",
+          "Iacov 4:8",
+          "Matei 6:9, 10",
+          "Isaia 55:11",
+          "Efeseni 5:33",
+          "Isaia 65:21-23",
+          "Ioan 13:35",
+          "Galateni 5:22, 23",
+          "Geneza 1:1",
+          "Revelatia 21:4"
+        ],
+        en: [
+          "John 3:16",
+          "Psalm 37:29",
+          "Matthew 5:3",
+          "Proverbs 3:5",
+          "Philippians 4:6",
+          "Romans 8:38,39",
+          "Isaiah 41:10",
+          "Psalm 119:105",
+          "Matthew 6:33",
+          "Acts 20:35",
+          "2 Timothy 3:1-5",
+          "Daniel 2:44",
+          "2 Timothy 3:16, 17",
+          "Proverbs 3:5, 6",
+          "Matthew 28:19, 20",
+          "Ephesians 5:22, 23",
+          "2 Peter 3:8",
+          "Ecclesiastes 9:5",
+          "Psalm 83:18",
+          "1 John 4:8",
+          "John 17:3",
+          "John 5:28, 29",
+          "Matthew 24:14",
+          "Romans 5:12",
+          "James 4:8",
+          "Matthew 6:9, 10",
+          "Isaiah 55:11",
+          "Ephesians 5:33",
+          "Isaiah 65:21-23",
+          "John 13:35",
+          "Galatians 5:22, 23",
+          "Genesis 1:1",
+          "Revelation 21:4"
+        ]
+      }
+    };
 
-  appTitle.textContent = t("title");
-  labelPlayerCount.textContent = t("labelPlayerCount");
-  btnCreateInputs.textContent = t("btnCreateInputs");
-  labelImpostors.textContent = t("labelImpostors");
-  labelCategory.textContent = t("labelCategory");
-  labelTimer.textContent = t("labelTimer");
-  btnStartGame.textContent = t("btnStartGame");
+    // Stare centralizată
+    const state = {
+      players: [],
+      roles: [],
+      currentPlayer: 0,
+      revealed: false,
+      timerInterval: null,
+      roundMinutes: 5,
+      timeLeft: 0,
+      lastImpostors: [],
+      language: "ro"
+    };
 
-  optCharacters.textContent = t("optCharacters");
-  optEvents.textContent = t("optEvents");
-  optVerses.textContent = t("optVerses");
+    /* AUDIO UNLOCK (IMPORTANT MOBILE) */
+    window.addEventListener('click', () => {
+      const a = document.getElementById("dramaticSound");
+      a.play().then(() => a.pause()).catch(() => {});
+      const b = document.getElementById("endSound");
+      b.play().then(() => b.pause()).catch(() => {});
+    }, { once: true });
 
-  nextBtn.textContent = t("nextBtn");
-  labelTimerSection.textContent = t("labelTimerSection");
-  startTimerBtn.textContent = t("startTimerBtn");
-  btnRevealAll.textContent = t("btnRevealAll");
-  btnNewRound.textContent = t("btnNewRound");
-  modalTitle.textContent = t("modalTitle");
-  modalClose.textContent = t("modalClose");
-
-  langBtn.textContent = t("langToggle");
-
-  if(!state.revealed) card.textContent = t("cardPrompt");
-
-  updatePlayerPlaceholders();
-}
-
-function updatePlayerPlaceholders(){
-  document.querySelectorAll("#players input")
-  .forEach((i,idx)=>i.placeholder=`${t("playerPlaceholder")} ${idx+1}`);
-}
-
-/* ================= LANGUAGE ================= */
-function toggleLanguage(){
-  state.language = state.language === "ro" ? "en" : "ro";
-  updateUI();
-}
-
-/* ================= INPUTS ================= */
-function createInputs(){
-  const count = +playerCount.value;
-  if(count < 3) return alert(t("alertMin3"));
-
-  const div = players;
-  div.innerHTML = "";
-
-  for(let i=0;i<count;i++){
-    const input = document.createElement("input");
-    input.id = "p"+i;
-    input.placeholder = `${t("playerPlaceholder")} ${i+1}`;
-    div.appendChild(input);
-  }
-}
-
-/* ================= GAME ================= */
-function startGame(){
-  const count = +playerCount.value;
-  const imp = +impostors.value;
-
-  if(count<3) return alert(t("alertMin3"));
-  if(imp<1) return alert(t("alertMin1Impostor"));
-
-  state.players = [];
-  for(let i=0;i<count;i++){
-    const el = document.getElementById("p"+i);
-    state.players.push(el?.value.trim() || `${t("playerDefault")} ${i+1}`);
-  }
-
-  state.roundMinutes = +roundTimer.value || 5;
-
-  const list = categories[category.value][state.language];
-  const word = list[Math.floor(Math.random()*list.length)];
-
-  state.roles = state.players.map(()=>({
-    type:"word",
-    value: t("wordRolePrefix") + word
-  }));
-
-  let eligible = state.players.map((n,i)=>({n,i}))
-    .filter(p=>!state.lastImpostors.includes(p.n));
-
-  if(eligible.length < imp){
-    eligible = state.players.map((n,i)=>({n,i}));
-  }
-
-  eligible.sort(()=>Math.random()-0.5);
-  const chosen = eligible.slice(0,imp);
-
-  chosen.forEach(p=>{
-    state.roles[p.i] = {type:"impostor"};
-  });
-
-  state.lastImpostors = chosen.map(p=>p.n);
-
-  setup.style.display="none";
-  game.style.display="flex";
-
-  state.currentPlayer=0;
-  state.revealed=false;
-
-  updateTurn();
-}
-
-/* ================= TURN ================= */
-function updateTurn(){
-  playerTurn.textContent =
-    state.players[state.currentPlayer] + t("playerTurnSuffix");
-}
-
-/* ================= REVEAL ================= */
-function revealRole(){
-  if(state.revealed) return;
-
-  const role = state.roles[state.currentPlayer];
-  const card = document.getElementById("card");
-
-  if(role.type === "impostor"){
-    card.textContent = t("impostorRole");
-    card.classList.add("impostor");
-  } else {
-    card.textContent = role.value;
-    card.classList.add("flipped");
-  }
-
-  state.revealed = true;
-  dramaticSound.play().catch(()=>{});
-}
-
-/* ================= NEXT ================= */
-function nextPlayer(){
-  if(!state.revealed) return alert(t("alertRevealRole"));
-
-  card.classList.remove("flipped","impostor");
-  card.textContent = t("cardPrompt");
-
-  state.revealed=false;
-  state.currentPlayer++;
-
-  if(state.currentPlayer >= state.players.length){
-    playerTurn.textContent = t("playerReady");
-    card.style.display="none";
-    nextBtn.style.display="none";
-    timerSection.classList.add("active");
-    endButtons.style.display="flex";
-    return;
-  }
-
-  updateTurn();
-}
-
-/* ================= TIMER ================= */
-function startTimer(){
-  clearInterval(state.timerInterval);
-
-  timerEl.classList.remove("expired");
-  state.timeLeft = state.roundMinutes*60;
-
-  timerEl.style.display="block";
-  startTimerBtn.style.display="none";
-
-  state.timerInterval = setInterval(()=>{
-    state.timeLeft--;
-
-    const m=Math.floor(state.timeLeft/60);
-    const s=state.timeLeft%60;
-
-    timerEl.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-
-    if(state.timeLeft<=0){
-      clearInterval(state.timerInterval);
-      timerEl.classList.add("expired");
-      endSound.play().catch(()=>{});
-      alert(t("alertTimeUp"));
+    // ========== FUNCȚIE HELPER I18N ==========
+    function t(key) {
+      return i18n[state.language][key] || key;
     }
-  },1000);
-}
 
-/* ================= MODAL ================= */
-function revealAll(){
-  modalList.innerHTML="";
+    // ========== ACTUALIZARE UI (CENTRALIZATĂ) ==========
+    function updateUI() {
+      // Actualizează titluri și etichete
+      document.getElementById("labelPlayerCount").textContent = t("labelPlayerCount");
+      document.getElementById("btnCreateInputs").textContent = t("btnCreateInputs");
+      document.getElementById("labelImpostors").textContent = t("labelImpostors");
+      document.getElementById("labelCategory").textContent = t("labelCategory");
+      document.getElementById("labelTimer").textContent = t("labelTimer");
+      document.getElementById("btnStartGame").textContent = t("btnStartGame");
+      document.getElementById("optCharacters").textContent = t("optCharacters");
+      document.getElementById("optEvents").textContent = t("optEvents");
+      document.getElementById("optVerses").textContent = t("optVerses");
+      document.getElementById("nextBtn").textContent = t("nextBtn");
+      document.getElementById("labelTimerSection").textContent = t("labelTimerSection");
+      document.getElementById("startTimerBtn").textContent = t("startTimerBtn");
+      document.getElementById("btnRevealAll").textContent = t("btnRevealAll");
+      document.getElementById("btnNewRound").textContent = t("btnNewRound");
+      document.getElementById("modalTitle").textContent = t("modalTitle");
+      document.getElementById("modalClose").textContent = t("modalClose");
 
-  state.players.forEach((p,i)=>{
-    const r = state.roles[i];
-    const li=document.createElement("li");
+      // Actualizează butonul de limbă
+      document.getElementById("langBtn").textContent = t("langToggle");
 
-    li.innerHTML = `<strong>${p}</strong> → ${
-      r.type==="impostor"
-        ? `<span class="impostor-label">${t("impostorRole")}</span>`
-        : r.value
-    }`;
+      // Dacă nu e joc în curs, actualizează cardului la starea inițială
+      if (state.players.length === 0 || document.getElementById("game").style.display === "none") {
+        document.getElementById("card").textContent = t("cardPrompt");
+      }
 
-    modalList.appendChild(li);
-  });
+      // Reactualizează placeholder-urile input-urilor
+      updatePlayerPlaceholders();
+    }
 
-  modal.classList.add("open");
-}
+    // ========== ACTUALIZARE PLACEHOLDER-URI JUCĂTORI ==========
+    function updatePlayerPlaceholders() {
+      const inputs = document.querySelectorAll("#players input");
+      inputs.forEach((input, index) => {
+        input.placeholder = `${t("playerPlaceholder")} ${index + 1}`;
+      });
+    }
 
-function closeModal(){ modal.classList.remove("open"); }
+    /**
+     * Schimbă limba și actualizează interfața
+     */
+    function toggleLanguage() {
+      state.language = state.language === "ro" ? "en" : "ro";
+      updateUI();
+    }
 
-/* ================= RESET ================= */
-function newRound(){
-  if(!confirm(t("alertConfirmNewRound"))) return;
+    function createInputs() {
+      const count = parseInt(document.getElementById("playerCount").value);
 
-  clearInterval(state.timerInterval);
+      if (isNaN(count) || count < 3) {
+        alert(t("alertMin3"));
+        return;
+      }
 
-  timerEl.textContent="00:00";
-  timerEl.style.display="none";
+      const div = document.getElementById("players");
+      const old = [];
+      for (let i = 0; i < count; i++) {
+        const el = document.getElementById("p" + i);
+        old.push(el ? el.value : "");
+      }
 
-  setup.style.display="block";
-  game.style.display="none";
-  card.style.display="block";
-  nextBtn.style.display="block";
-  endButtons.style.display="none";
-  timerSection.classList.remove("active");
-}
+      div.innerHTML = "";
+      for (let i = 0; i < count; i++) {
+        const input = document.createElement("input");
+        input.id = "p" + i;
+        input.placeholder = `${t("playerPlaceholder")} ${i + 1}`;
+        input.value = old[i] || "";
+        div.appendChild(input);
+      }
+    }
 
-/* ================= INIT ================= */
-updateUI();
+    function shuffle(a) {
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+    }
 
-</script>
+    function startGame() {
+      const count = parseInt(document.getElementById("playerCount").value);
+      const impostorCount = parseInt(document.getElementById("impostors").value);
+
+      // Validări
+      if (isNaN(count) || count < 3) {
+        alert(t("alertMin3"));
+        return;
+      }
+      if (isNaN(impostorCount) || impostorCount < 1) {
+        alert(t("alertMin1Impostor"));
+        return;
+      }
+
+      state.players = [];
+      for (let i = 0; i < count; i++) {
+        const el = document.getElementById("p" + i);
+        state.players.push(el ? (el.value.trim() || "Jucător " + (i + 1)) : "Jucător " + (i + 1));
+      }
+
+      state.roundMinutes = parseInt(document.getElementById("roundTimer").value) || 5;
+
+      const selectedCategory = document.getElementById("category").value;
+      const list = categories[selectedCategory][state.language];
+      const word = list[Math.floor(Math.random() * list.length)];
+
+      const wordPrefix = state.language === "ro" ? "Este vorba despre: " : "It is about: ";
+      state.roles = state.players.map(() => wordPrefix + word);
+
+      const impostorSlots = Math.min(impostorCount, state.players.length);
+
+      // Candidati care nu au fost impostori runda trecuta
+      let eligible = state.players
+        .map((name, i) => ({ name, i }))
+        .filter(p => !state.lastImpostors.includes(p.name));
+
+      // Daca nu sunt destui candidati eligibili, completam cu restul
+      if (eligible.length < impostorSlots) {
+        const rest = state.players
+          .map((name, i) => ({ name, i }))
+          .filter(p => !eligible.find(e => e.i === p.i));
+        eligible = [...eligible, ...rest];
+      }
+
+      shuffle(eligible);
+      const chosen = eligible.slice(0, impostorSlots);
+
+      const impostorText = state.language === "ro" ? "Ești un Profet fals 😈" : "You're a false prophet 😈";
+      chosen.forEach(p => { state.roles[p.i] = impostorText; });
+      state.lastImpostors = chosen.map(p => p.name);
+
+      shuffle(state.roles);
+
+      document.getElementById("setup").style.display = "none";
+      document.getElementById("game").style.display = "flex";
+
+      state.currentPlayer = 0;
+      state.revealed = false;
+
+      updateTurn();
+    }
+
+    function updateTurn() {
+      document.getElementById("playerTurn").textContent =
+        state.players[state.currentPlayer] + ", e rândul tău";
+    }
+
+    function revealRole() {
+      if (state.revealed) return;
+
+      const card = document.getElementById("card");
+      card.textContent = state.roles[state.currentPlayer];
+
+      const profetCheck = state.language === "ro" ? "Profet" : "prophet";
+      if (state.roles[state.currentPlayer].includes(profetCheck))
+        card.classList.add("impostor");
+      else
+        card.classList.add("flipped");
+
+      document.getElementById("dramaticSound").play().catch(() => {});
+      state.revealed = true;
+    }
+
+    function nextPlayer() {
+      if (!state.revealed) {
+        alert("Dezvăluie rolul!");
+        return;
+      }
+
+      const card = document.getElementById("card");
+      card.classList.remove("flipped", "impostor");
+      card.textContent = "ÎNTOARCE CARTEA";
+
+      state.revealed = false;
+      state.currentPlayer++;
+
+      if (state.currentPlayer >= state.players.length) {
+        document.getElementById("playerTurn").textContent = "Jocul poate începe 🎉";
+        document.getElementById("card").style.display = "none";
+        document.getElementById("nextBtn").style.display = "none";
+        document.getElementById("timerSection").classList.add("active");
+        document.getElementById("endButtons").style.display = "flex";
+        return;
+      }
+
+      updateTurn();
+    }
+
+    function startTimer() {
+      clearInterval(state.timerInterval);
+
+      const timerEl = document.getElementById("timer");
+      timerEl.classList.remove("expired");
+      state.timeLeft = state.roundMinutes * 60;
+      timerEl.style.display = "block";
+      document.getElementById("startTimerBtn").style.display = "none";
+
+      state.timerInterval = setInterval(() => {
+        state.timeLeft--;
+
+        const m = Math.floor(state.timeLeft / 60);
+        const s = state.timeLeft % 60;
+
+        timerEl.textContent =
+          `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
+        if (state.timeLeft <= 0) {
+          clearInterval(state.timerInterval);
+          timerEl.classList.add("expired");
+          document.getElementById("endSound").play().catch(() => {});
+          alert("Timpul s-a terminat!");
+        }
+      }, 1000);
+    }
+
+    function revealAll() {
+      const list = document.getElementById("modalList");
+      list.innerHTML = "";
+
+      state.players.forEach((p, i) => {
+        const li = document.createElement("li");
+        const profetCheck = state.language === "ro" ? "Profet" : "prophet";
+        const isImpostor = state.roles[i].includes(profetCheck);
+        li.innerHTML = `<strong>${p}</strong> → <span class="${isImpostor ? 'impostor-label' : ''}">${state.roles[i]}</span>`;
+        list.appendChild(li);
+      });
+
+      document.getElementById("modal").classList.add("open");
+    }
+
+    function closeModal() {
+      document.getElementById("modal").classList.remove("open");
+    }
+
+    // Închide modal dacă se apasă în afara lui
+    document.getElementById("modal").addEventListener("click", function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    function newRound() {
+      if (!confirm("Ești sigur că vrei să începi un joc nou? Jocul curent se va pierde.")) return;
+
+      clearInterval(state.timerInterval);
+
+      const timerEl = document.getElementById("timer");
+      timerEl.textContent = "00:00";
+      timerEl.style.display = "none";
+      timerEl.classList.remove("expired");
+
+      document.getElementById("startTimerBtn").style.display = "inline-block";
+      document.getElementById("setup").style.display = "block";
+      document.getElementById("game").style.display = "none";
+      document.getElementById("card").style.display = "block";
+      document.getElementById("nextBtn").style.display = "block";
+      document.getElementById("endButtons").style.display = "none";
+      document.getElementById("timerSection").classList.remove("active");
+    }
+
+    // ========== INIȚIALIZARE ==========
+    updateUI();
+  </script>
 </body>
 </html>
