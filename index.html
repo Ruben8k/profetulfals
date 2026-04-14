@@ -109,6 +109,7 @@
       background: #1e3a8a; /* albastru */
       color: white;
       font-weight: bold;
+      perspective: 1000px;
     }
 
     .card {
@@ -128,22 +129,55 @@
       align-items: center;
       justify-content: center;
       font-size: 18px;
+      transform-style: preserve-3d;
+      position: relative;
+    }
+
+    .card::before {
+      content: "ÎNTOARCE CARTEA";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      transform: rotateY(180deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #222;
+      color: white;
+      font-size: 18px;
+      border-radius: 12px;
+      padding: 30px 20px;
+      box-sizing: border-box;
     }
 
     .card:active {
-      transform: scale(0.95);
+      animation: flip 0.6s ease forwards;
+    }
+
+    @keyframes flip {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(180deg); }
+    }
+
+    .card:active {
+      transform: rotateY(180deg);
     }
 
     .flipped {
       background: #f39c12;
       color: black;
       font-weight: bold;
+      transform: rotateY(180deg);
     }
 
     .impostor {
       background: #e74c3c !important;
       color: white !important;
       font-weight: bold;
+      transform: rotateY(180deg);
     }
 
     #timer {
@@ -378,6 +412,11 @@
         font-size: 20px;
       }
 
+      .card::before {
+        padding: 40px 30px;
+        font-size: 20px;
+      }
+
       #game {
         max-width: 500px;
       }
@@ -428,6 +467,10 @@
         min-height: 100px;
       }
 
+      .card::before {
+        padding: 15px;
+      }
+
       button {
         padding: 10px;
         margin: 4px auto;
@@ -436,26 +479,6 @@
       #endButtons {
         gap: 8px;
       }
-    }
-
-    /* Cinematic background additions */
-    body {
-      background-image: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 25%, #16213e 50%, #0f0f23 75%, #0a0a0a 100%);
-      background-attachment: fixed;
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.2);
-      z-index: -1;
-      pointer-events: none;
     }
   </style>
 </head>
@@ -563,9 +586,6 @@
         labelPlayerCount: "Player count",
         btnCreateInputs: "Enter names",
         labelImpostors: "Number of false prophets",
-        labelCategory: "Game category",
-        labelTimer: "Time (minutes)",
-        btnStartGame: "Start game",
         optCharacters: "Bible characters",
         optEvents: "Biblical events",
         optVerses: "Bible verses",
@@ -812,7 +832,7 @@
           "Matthew 28:19, 20",
           "Ephesians 5:22, 23",
           "2 Peter 3:8",
-          "Ecclesiastes 9:5",
+      "Ecclesiastes 9:5",
           "Psalm 83:18",
           "1 John 4:8",
           "John 17:3",
