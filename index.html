@@ -12,7 +12,26 @@ body{
     background:#111;
     color:white;
     margin:0;
-    padding:15px;
+    padding:60px 15px 15px;
+}
+
+#langToggle{
+    position:fixed;
+    top:15px;
+    right:15px;
+    z-index:200;
+    width:auto;
+    margin:0;
+    padding:10px 14px;
+    border-radius:8px;
+    border:none;
+    background:#222;
+    color:white;
+    cursor:pointer;
+}
+
+#langToggle:hover{
+    background:#333;
 }
 
 button,input,select{
@@ -138,31 +157,33 @@ button:hover{
 
 <body>
 
-<h1>🕵️ Detectiv Biblic</h1>
+<button id="langToggle" type="button" onclick="toggleLanguage()">EN</button>
+
+<h1 id="title">🕵️ Detectiv Biblic</h1>
 
 <div id="setup">
-<h3>Număr jucători</h3>
+<h3 id="labelPlayers">Număr jucători</h3>
 <input type="number" id="playerCount" value="10" min="3">
 <br>
-<button onclick="createInputs()">Introdu nume</button>
+<button id="btnCreateInputs" onclick="createInputs()">Introdu nume</button>
 
 <div id="players"></div>
 
-<h3>Număr profeţi falşi</h3>
+<h3 id="labelImpostors">Număr profeţi falși</h3>
 <input type="number" id="impostors" value="2" min="1">
 
-<h3>Categorie joc</h3>
+<h3 id="labelCategory">Categorie joc</h3>
 <select id="category">
   <option value="characters">Personaje biblice</option>
   <option value="events">Relatări biblice</option>
   <option value="verses">Versete biblice</option>
 </select>
 
-<h3>Timp (minute)</h3>
+<h3 id="labelTimer">Timp (minute)</h3>
 <input type="number" id="roundTimer" value="5" min="1">
 
 <br>
-<button onclick="startGame()">Start joc</button>
+<button id="btnStartGame" onclick="startGame()">Start joc</button>
 </div>
 
 <div id="game" style="display:none;">
@@ -176,14 +197,14 @@ Apasă AICI ca să dezvălui rolul tău
 <button id="nextBtn" onclick="nextPlayer()">Următorul jucător</button>
 
 <div id="timerSection" style="display:none;">
-<h3>⏱ Timer rundă</h3>
+<h3 id="labelTimerSection">⏱ Timer rundă</h3>
 <div id="timer">00:00</div>
 <button id="startTimerBtn" onclick="startTimer()">Start Timp</button>
 </div>
 
 <div id="endButtons">
-<button onclick="revealAll()">Descoperă toți jucătorii</button>
-<button onclick="newRound()">Începe joc nou</button>
+<button id="btnRevealAll" onclick="revealAll()">Descoperă toți jucătorii</button>
+<button id="btnNewRound" onclick="newRound()">Începe joc nou</button>
 </div>
 
 </div>
@@ -191,7 +212,7 @@ Apasă AICI ca să dezvălui rolul tău
 <!-- Modal rezultate -->
 <div id="modal">
   <div id="modalBox">
-    <h3>🔍 Rezultate</h3>
+    <h3 id="modalTitle">🔍 Rezultate</h3>
     <ul id="modalList"></ul>
     <button id="modalClose" onclick="closeModal()">Închide</button>
   </div>
@@ -324,7 +345,67 @@ verses: [
 
 };
 
-// Stare centralizată
+const translations = {
+  ro: {
+    title: "Detectiv Biblic",
+    players: "Număr jucători",
+    enterNames: "Introdu nume",
+    impostors: "Număr profeţi falși",
+    category: "Categorie joc",
+    timer: "Timp (minute)",
+    start: "Start joc",
+    cardPrompt: "Apasă AICI ca să dezvălui rolul tău",
+    next: "Următorul jucător",
+    roundTimer: "⏱ Timer rundă",
+    startTimer: "Start Timp",
+    revealAll: "Descoperă toți jucătorii",
+    newRound: "Începe joc nou",
+    results: "🔍 Rezultate",
+    close: "Închide",
+    playerTurnSuffix: ", e rândul tău",
+    ready: "Jocul poate începe 🎉",
+    min3: "Minim 3 jucători!",
+    min1: "Trebuie cel puțin 1 impostor!",
+    revealRoleAlert: "Dezvăluie rolul!",
+    timeUp: "Timpul s-a terminat!",
+    confirmNewRound: "Ești sigur că vrei să începi un joc nou? Jocul curent se va pierde.",
+    playerPlaceholder: "Jucător",
+    languageToggle: "EN",
+    categoryCharacters: "Personaje biblice",
+    categoryEvents: "Relatări biblice",
+    categoryVerses: "Versete biblice"
+  },
+  en: {
+    title: "Biblical Detective",
+    players: "Player count",
+    enterNames: "Enter names",
+    impostors: "Number of false prophets",
+    category: "Game category",
+    timer: "Time (minutes)",
+    start: "Start game",
+    cardPrompt: "Tap HERE to reveal your role",
+    next: "Next player",
+    roundTimer: "⏱ Round timer",
+    startTimer: "Start timer",
+    revealAll: "Reveal all players",
+    newRound: "New game",
+    results: "🔍 Results",
+    close: "Close",
+    playerTurnSuffix: ", it's your turn",
+    ready: "Game can start 🎉",
+    min3: "Minimum 3 players!",
+    min1: "There must be at least 1 impostor!",
+    revealRoleAlert: "Reveal your role!",
+    timeUp: "Time is up!",
+    confirmNewRound: "Are you sure you want to start a new game? Current game will be lost.",
+    playerPlaceholder: "Player",
+    languageToggle: "RO",
+    categoryCharacters: "Bible characters",
+    categoryEvents: "Biblical events",
+    categoryVerses: "Bible verses"
+  }
+};
+
 const state = {
   players: [],
   roles: [],
@@ -333,22 +414,66 @@ const state = {
   timerInterval: null,
   roundMinutes: 5,
   timeLeft: 0,
-  lastImpostors: []
+  lastImpostors: [],
+  language: "ro"
 };
 
-/* AUDIO UNLOCK (IMPORTANT MOBILE) */
-window.addEventListener('click', () => {
-  const a = document.getElementById("dramaticSound");
-  a.play().then(() => a.pause()).catch(() => {});
-  const b = document.getElementById("endSound");
-  b.play().then(() => b.pause()).catch(() => {});
-}, { once: true });
+function setLanguage(lang) {
+  state.language = lang;
+  const t = translations[lang];
+
+  document.title = t.title;
+  document.getElementById("title").textContent = "🕵️ " + t.title;
+  document.getElementById("labelPlayers").textContent = t.players;
+  document.getElementById("btnCreateInputs").textContent = t.enterNames;
+  document.getElementById("labelImpostors").textContent = t.impostors;
+  document.getElementById("labelCategory").textContent = t.category;
+  document.getElementById("labelTimer").textContent = t.timer;
+  document.getElementById("btnStartGame").textContent = t.start;
+  document.getElementById("labelTimerSection").textContent = t.roundTimer;
+  document.getElementById("startTimerBtn").textContent = t.startTimer;
+  document.getElementById("btnRevealAll").textContent = t.revealAll;
+  document.getElementById("btnNewRound").textContent = t.newRound;
+  document.getElementById("modalTitle").textContent = t.results;
+  document.getElementById("modalClose").textContent = t.close;
+  document.getElementById("langToggle").textContent = t.languageToggle;
+
+  const categorySelect = document.getElementById("category");
+  const selectedValue = categorySelect.value;
+  categorySelect.innerHTML = `
+    <option value="characters">${t.categoryCharacters}</option>
+    <option value="events">${t.categoryEvents}</option>
+    <option value="verses">${t.categoryVerses}</option>
+  `;
+  categorySelect.value = selectedValue;
+
+  if (!state.revealed) {
+    document.getElementById("card").textContent = t.cardPrompt;
+  }
+  updatePlayerPlaceholders();
+  if (state.players.length && state.currentPlayer < state.players.length) {
+    updateTurn();
+  } else if (state.currentPlayer >= state.players.length) {
+    document.getElementById("playerTurn").textContent = t.ready;
+  }
+}
+
+function toggleLanguage() {
+  setLanguage(state.language === "ro" ? "en" : "ro");
+}
+
+function updatePlayerPlaceholders() {
+  const inputs = document.querySelectorAll("#players input");
+  inputs.forEach((input, index) => {
+    input.placeholder = `${translations[state.language].playerPlaceholder} ${index + 1}`;
+  });
+}
 
 function createInputs() {
   const count = parseInt(document.getElementById("playerCount").value);
 
   if (isNaN(count) || count < 3) {
-    alert("Minim 3 jucători!");
+    alert(translations[state.language].min3);
     return;
   }
 
@@ -363,7 +488,7 @@ function createInputs() {
   for (let i = 0; i < count; i++) {
     const input = document.createElement("input");
     input.id = "p" + i;
-    input.placeholder = "Jucător " + (i + 1);
+    input.placeholder = `${translations[state.language].playerPlaceholder} ${i + 1}`;
     input.value = old[i] || "";
     div.appendChild(input);
     div.appendChild(document.createElement("br"));
@@ -383,18 +508,18 @@ function startGame() {
 
   // Validări
   if (isNaN(count) || count < 3) {
-    alert("Minim 3 jucători!");
+    alert(translations[state.language].min3);
     return;
   }
   if (isNaN(impostorCount) || impostorCount < 1) {
-    alert("Trebuie cel puțin 1 impostor!");
+    alert(translations[state.language].min1);
     return;
   }
 
   state.players = [];
   for (let i = 0; i < count; i++) {
     const el = document.getElementById("p" + i);
-    state.players.push(el ? (el.value.trim() || "Jucător " + (i + 1)) : "Jucător " + (i + 1));
+    state.players.push(el ? (el.value.trim() || `${translations[state.language].playerPlaceholder} ${i + 1}`) : `${translations[state.language].playerPlaceholder} ${i + 1}`);
   }
 
   state.roundMinutes = parseInt(document.getElementById("roundTimer").value) || 5;
@@ -403,7 +528,7 @@ function startGame() {
   const list = categories[selectedCategory];
   const word = list[Math.floor(Math.random() * list.length)];
 
-  state.roles = state.players.map(() => "Este vorba despre: " + word);
+  state.roles = state.players.map(() => (state.language === "en" ? "It is about: " : "Este vorba despre: ") + word);
 
   const impostorSlots = Math.min(impostorCount, state.players.length);
 
@@ -422,7 +547,7 @@ function startGame() {
 
   shuffle(eligible);
   const chosen = eligible.slice(0, impostorSlots);
-  chosen.forEach(p => { state.roles[p.i] = "Ești un Profet fals 😈"; });
+  chosen.forEach(p => { state.roles[p.i] = state.language === "en" ? "You're a false prophet 😈" : "Ești un Profet fals 😈"; });
   state.lastImpostors = chosen.map(p => p.name);
 
   shuffle(state.roles);
@@ -437,8 +562,9 @@ function startGame() {
 }
 
 function updateTurn() {
+  const suffix = translations[state.language].playerTurnSuffix;
   document.getElementById("playerTurn").textContent =
-    state.players[state.currentPlayer] + ", e rândul tău";
+    state.players[state.currentPlayer] + suffix;
 }
 
 function revealRole() {
@@ -447,7 +573,7 @@ function revealRole() {
   const card = document.getElementById("card");
   card.textContent = state.roles[state.currentPlayer];
 
-  if (state.roles[state.currentPlayer].includes("Profet"))
+  if (state.roles[state.currentPlayer].includes("Profet") || state.roles[state.currentPlayer].includes("prophet"))
     card.classList.add("impostor");
   else
     card.classList.add("flipped");
@@ -458,19 +584,19 @@ function revealRole() {
 
 function nextPlayer() {
   if (!state.revealed) {
-    alert("Dezvăluie rolul!");
+    alert(translations[state.language].revealRoleAlert);
     return;
   }
 
   const card = document.getElementById("card");
   card.classList.remove("flipped", "impostor");
-  card.textContent = "Apasă AICI ca să dezvălui rolul tău";
+  card.textContent = translations[state.language].cardPrompt;
 
   state.revealed = false;
   state.currentPlayer++;
 
   if (state.currentPlayer >= state.players.length) {
-    document.getElementById("playerTurn").textContent = "Jocul poate începe 🎉";
+    document.getElementById("playerTurn").textContent = translations[state.language].ready;
     document.getElementById("card").style.display = "none";
     document.getElementById("nextBtn").style.display = "none";
     document.getElementById("timerSection").style.display = "block";
@@ -503,7 +629,7 @@ function startTimer() {
       clearInterval(state.timerInterval);
       timerEl.classList.add("expired");
       document.getElementById("endSound").play().catch(() => {});
-      alert("Timpul s-a terminat!");
+      alert(translations[state.language].timeUp);
     }
   }, 1000);
 }
@@ -514,7 +640,7 @@ function revealAll() {
 
   state.players.forEach((p, i) => {
     const li = document.createElement("li");
-    const isImpostor = state.roles[i].includes("Profet");
+    const isImpostor = state.roles[i].includes("Profet") || state.roles[i].includes("prophet");
     li.innerHTML = `<strong>${p}</strong> → <span class="${isImpostor ? 'impostor-label' : ''}">${state.roles[i]}</span>`;
     list.appendChild(li);
   });
@@ -532,7 +658,7 @@ document.getElementById("modal").addEventListener("click", function(e) {
 });
 
 function newRound() {
-  if (!confirm("Ești sigur că vrei să începi un joc nou? Jocul curent se va pierde.")) return;
+  if (!confirm(translations[state.language].confirmNewRound)) return;
 
   clearInterval(state.timerInterval);
 
@@ -549,6 +675,8 @@ function newRound() {
   document.getElementById("endButtons").style.display = "none";
   document.getElementById("timerSection").style.display = "none";
 }
+
+setLanguage(state.language);
 
 </script>
 </body>
