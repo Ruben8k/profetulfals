@@ -20,13 +20,11 @@ body{
     top:15px;
     right:15px;
     z-index:200;
-    width:auto;
-    margin:0;
-    padding:10px 14px;
-    border-radius:8px;
-    border:none;
     background:#222;
     color:white;
+    border:none;
+    padding:10px 14px;
+    border-radius:8px;
     cursor:pointer;
 }
 
@@ -157,54 +155,52 @@ button:hover{
 
 <body>
 
-<button id="langToggle" type="button" onclick="toggleLanguage()">EN</button>
+<button id="langToggle" type="button" onclick="toggleLanguage()"></button>
 
-<h1 id="title">🕵️ Detectiv Biblic</h1>
+<h1 id="title"></h1>
 
 <div id="setup">
-<h3 id="labelPlayers">Număr jucători</h3>
+<h3 id="labelPlayers"></h3>
 <input type="number" id="playerCount" value="10" min="3">
 <br>
-<button id="btnCreateInputs" onclick="createInputs()">Introdu nume</button>
+<button id="btnCreateInputs" onclick="createInputs()"></button>
 
 <div id="players"></div>
 
-<h3 id="labelImpostors">Număr profeţi falși</h3>
+<h3 id="labelImpostors"></h3>
 <input type="number" id="impostors" value="2" min="1">
 
-<h3 id="labelCategory">Categorie joc</h3>
+<h3 id="labelCategory"></h3>
 <select id="category">
-  <option value="characters">Personaje biblice</option>
-  <option value="events">Relatări biblice</option>
-  <option value="verses">Versete biblice</option>
+  <option value="characters" id="optCharacters"></option>
+  <option value="events" id="optEvents"></option>
+  <option value="verses" id="optVerses"></option>
 </select>
 
-<h3 id="labelTimer">Timp (minute)</h3>
+<h3 id="labelTimer"></h3>
 <input type="number" id="roundTimer" value="5" min="1">
 
 <br>
-<button id="btnStartGame" onclick="startGame()">Start joc</button>
+<button id="btnStartGame" onclick="startGame()"></button>
 </div>
 
 <div id="game" style="display:none;">
 
 <h2 id="playerTurn"></h2>
 
-<div id="card" class="card" onclick="revealRole()">
-Apasă AICI ca să dezvălui rolul tău
-</div>
+<div id="card" class="card" onclick="revealRole()"></div>
 
-<button id="nextBtn" onclick="nextPlayer()">Următorul jucător</button>
+<button id="nextBtn" onclick="nextPlayer()"></button>
 
 <div id="timerSection" style="display:none;">
-<h3 id="labelTimerSection">⏱ Timer rundă</h3>
+<h3 id="labelTimerSection"></h3>
 <div id="timer">00:00</div>
-<button id="startTimerBtn" onclick="startTimer()">Start Timp</button>
+<button id="startTimerBtn" onclick="startTimer()"></button>
 </div>
 
 <div id="endButtons">
-<button id="btnRevealAll" onclick="revealAll()">Descoperă toți jucătorii</button>
-<button id="btnNewRound" onclick="newRound()">Începe joc nou</button>
+<button id="btnRevealAll" onclick="revealAll()"></button>
+<button id="btnNewRound" onclick="newRound()"></button>
 </div>
 
 </div>
@@ -212,9 +208,9 @@ Apasă AICI ca să dezvălui rolul tău
 <!-- Modal rezultate -->
 <div id="modal">
   <div id="modalBox">
-    <h3 id="modalTitle">🔍 Rezultate</h3>
+    <h3 id="modalTitle"></h3>
     <ul id="modalList"></ul>
-    <button id="modalClose" onclick="closeModal()">Închide</button>
+    <button id="modalClose" onclick="closeModal()"></button>
   </div>
 </div>
 
@@ -348,24 +344,24 @@ verses: [
 const translations = {
   ro: {
     title: "Detectiv Biblic",
-    players: "Număr jucători",
+    playersLabel: "Număr jucători",
     enterNames: "Introdu nume",
-    impostors: "Număr profeţi falși",
-    category: "Categorie joc",
-    timer: "Timp (minute)",
-    start: "Start joc",
+    impostorsLabel: "Număr profeţi falși",
+    categoryLabel: "Categorie joc",
+    timerLabel: "Timp (minute)",
+    startGame: "Start joc",
     cardPrompt: "Apasă AICI ca să dezvălui rolul tău",
-    next: "Următorul jucător",
-    roundTimer: "⏱ Timer rundă",
+    nextPlayer: "Următorul jucător",
+    timerSection: "⏱ Timer rundă",
     startTimer: "Start Timp",
     revealAll: "Descoperă toți jucătorii",
     newRound: "Începe joc nou",
-    results: "🔍 Rezultate",
+    modalResults: "🔍 Rezultate",
     close: "Închide",
     playerTurnSuffix: ", e rândul tău",
     ready: "Jocul poate începe 🎉",
-    min3: "Minim 3 jucători!",
-    min1: "Trebuie cel puțin 1 impostor!",
+    min3Players: "Minim 3 jucători!",
+    min1Impostor: "Trebuie cel puțin 1 impostor!",
     revealRoleAlert: "Dezvăluie rolul!",
     timeUp: "Timpul s-a terminat!",
     confirmNewRound: "Ești sigur că vrei să începi un joc nou? Jocul curent se va pierde.",
@@ -373,28 +369,30 @@ const translations = {
     languageToggle: "EN",
     categoryCharacters: "Personaje biblice",
     categoryEvents: "Relatări biblice",
-    categoryVerses: "Versete biblice"
+    categoryVerses: "Versete biblice",
+    wordRolePrefix: "Este vorba despre: ",
+    impostorText: "Ești un Profet fals 😈"
   },
   en: {
     title: "Biblical Detective",
-    players: "Player count",
+    playersLabel: "Player count",
     enterNames: "Enter names",
-    impostors: "Number of false prophets",
-    category: "Game category",
-    timer: "Time (minutes)",
-    start: "Start game",
+    impostorsLabel: "Number of false prophets",
+    categoryLabel: "Game category",
+    timerLabel: "Time (minutes)",
+    startGame: "Start game",
     cardPrompt: "Tap HERE to reveal your role",
-    next: "Next player",
-    roundTimer: "⏱ Round timer",
+    nextPlayer: "Next player",
+    timerSection: "⏱ Round timer",
     startTimer: "Start timer",
     revealAll: "Reveal all players",
     newRound: "New game",
-    results: "🔍 Results",
+    modalResults: "🔍 Results",
     close: "Close",
     playerTurnSuffix: ", it's your turn",
     ready: "Game can start 🎉",
-    min3: "Minimum 3 players!",
-    min1: "There must be at least 1 impostor!",
+    min3Players: "Minimum 3 players!",
+    min1Impostor: "There must be at least 1 impostor!",
     revealRoleAlert: "Reveal your role!",
     timeUp: "Time is up!",
     confirmNewRound: "Are you sure you want to start a new game? Current game will be lost.",
@@ -402,7 +400,9 @@ const translations = {
     languageToggle: "RO",
     categoryCharacters: "Bible characters",
     categoryEvents: "Biblical events",
-    categoryVerses: "Bible verses"
+    categoryVerses: "Bible verses",
+    wordRolePrefix: "It is about: ",
+    impostorText: "You're a false prophet 😈"
   }
 };
 
@@ -415,65 +415,23 @@ const state = {
   roundMinutes: 5,
   timeLeft: 0,
   lastImpostors: [],
+  word: "",
   language: "ro"
 };
 
-function setLanguage(lang) {
-  state.language = lang;
-  const t = translations[lang];
-
-  document.title = t.title;
-  document.getElementById("title").textContent = "🕵️ " + t.title;
-  document.getElementById("labelPlayers").textContent = t.players;
-  document.getElementById("btnCreateInputs").textContent = t.enterNames;
-  document.getElementById("labelImpostors").textContent = t.impostors;
-  document.getElementById("labelCategory").textContent = t.category;
-  document.getElementById("labelTimer").textContent = t.timer;
-  document.getElementById("btnStartGame").textContent = t.start;
-  document.getElementById("labelTimerSection").textContent = t.roundTimer;
-  document.getElementById("startTimerBtn").textContent = t.startTimer;
-  document.getElementById("btnRevealAll").textContent = t.revealAll;
-  document.getElementById("btnNewRound").textContent = t.newRound;
-  document.getElementById("modalTitle").textContent = t.results;
-  document.getElementById("modalClose").textContent = t.close;
-  document.getElementById("langToggle").textContent = t.languageToggle;
-
-  const categorySelect = document.getElementById("category");
-  const selectedValue = categorySelect.value;
-  categorySelect.innerHTML = `
-    <option value="characters">${t.categoryCharacters}</option>
-    <option value="events">${t.categoryEvents}</option>
-    <option value="verses">${t.categoryVerses}</option>
-  `;
-  categorySelect.value = selectedValue;
-
-  if (!state.revealed) {
-    document.getElementById("card").textContent = t.cardPrompt;
-  }
-  updatePlayerPlaceholders();
-  if (state.players.length && state.currentPlayer < state.players.length) {
-    updateTurn();
-  } else if (state.currentPlayer >= state.players.length) {
-    document.getElementById("playerTurn").textContent = t.ready;
-  }
-}
-
-function toggleLanguage() {
-  setLanguage(state.language === "ro" ? "en" : "ro");
-}
-
-function updatePlayerPlaceholders() {
-  const inputs = document.querySelectorAll("#players input");
-  inputs.forEach((input, index) => {
-    input.placeholder = `${translations[state.language].playerPlaceholder} ${index + 1}`;
-  });
-}
+/* AUDIO UNLOCK (IMPORTANT MOBILE) */
+window.addEventListener('click', () => {
+  const a = document.getElementById("dramaticSound");
+  a.play().then(() => a.pause()).catch(() => {});
+  const b = document.getElementById("endSound");
+  b.play().then(() => b.pause()).catch(() => {});
+}, { once: true });
 
 function createInputs() {
   const count = parseInt(document.getElementById("playerCount").value);
 
   if (isNaN(count) || count < 3) {
-    alert(translations[state.language].min3);
+    alert(translations[state.language].min3Players);
     return;
   }
 
@@ -502,17 +460,79 @@ function shuffle(a) {
   }
 }
 
+function setLanguage(lang) {
+  state.language = lang;
+  document.documentElement.lang = lang;
+  const t = translations[lang];
+
+  document.title = t.title;
+  document.getElementById("title").textContent = `🕵️ ${t.title}`;
+  document.getElementById("labelPlayers").textContent = t.playersLabel;
+  document.getElementById("btnCreateInputs").textContent = t.enterNames;
+  document.getElementById("labelImpostors").textContent = t.impostorsLabel;
+  document.getElementById("labelCategory").textContent = t.categoryLabel;
+  document.getElementById("labelTimer").textContent = t.timerLabel;
+  document.getElementById("btnStartGame").textContent = t.startGame;
+  document.getElementById("labelTimerSection").textContent = t.timerSection;
+  document.getElementById("startTimerBtn").textContent = t.startTimer;
+  document.getElementById("btnRevealAll").textContent = t.revealAll;
+  document.getElementById("btnNewRound").textContent = t.newRound;
+  document.getElementById("modalTitle").textContent = t.modalResults;
+  document.getElementById("modalClose").textContent = t.close;
+  document.getElementById("langToggle").textContent = t.languageToggle;
+
+  document.getElementById("optCharacters").textContent = t.categoryCharacters;
+  document.getElementById("optEvents").textContent = t.categoryEvents;
+  document.getElementById("optVerses").textContent = t.categoryVerses;
+
+  updatePlayerPlaceholders();
+
+  if (state.revealed && state.roles[state.currentPlayer]) {
+    document.getElementById("card").textContent = state.roles[state.currentPlayer].text;
+  } else {
+    document.getElementById("card").textContent = t.cardPrompt;
+  }
+
+  if (state.players.length && state.currentPlayer < state.players.length) {
+    updateTurn();
+  } else if (state.currentPlayer >= state.players.length) {
+    document.getElementById("playerTurn").textContent = t.ready;
+  }
+
+  if (state.word) {
+    localizeRoles();
+  }
+}
+
+function toggleLanguage() {
+  setLanguage(state.language === "ro" ? "en" : "ro");
+}
+
+function updatePlayerPlaceholders() {
+  const inputs = document.querySelectorAll("#players input");
+  inputs.forEach((input, index) => {
+    input.placeholder = `${translations[state.language].playerPlaceholder} ${index + 1}`;
+  });
+}
+
+function localizeRoles() {
+  state.roles.forEach(role => {
+    role.text = role.isImpostor
+      ? translations[state.language].impostorText
+      : translations[state.language].wordRolePrefix + state.word;
+  });
+}
+
 function startGame() {
   const count = parseInt(document.getElementById("playerCount").value);
   const impostorCount = parseInt(document.getElementById("impostors").value);
 
-  // Validări
   if (isNaN(count) || count < 3) {
-    alert(translations[state.language].min3);
+    alert(translations[state.language].min3Players);
     return;
   }
   if (isNaN(impostorCount) || impostorCount < 1) {
-    alert(translations[state.language].min1);
+    alert(translations[state.language].min1Impostor);
     return;
   }
 
@@ -528,16 +548,15 @@ function startGame() {
   const list = categories[selectedCategory];
   const word = list[Math.floor(Math.random() * list.length)];
 
-  state.roles = state.players.map(() => (state.language === "en" ? "It is about: " : "Este vorba despre: ") + word);
+  state.word = word;
+  state.roles = state.players.map(() => ({ text: "", isImpostor: false }));
 
   const impostorSlots = Math.min(impostorCount, state.players.length);
 
-  // Candidati care nu au fost impostori runda trecuta
   let eligible = state.players
     .map((name, i) => ({ name, i }))
     .filter(p => !state.lastImpostors.includes(p.name));
 
-  // Daca nu sunt destui candidati eligibili, completam cu restul
   if (eligible.length < impostorSlots) {
     const rest = state.players
       .map((name, i) => ({ name, i }))
@@ -547,9 +566,10 @@ function startGame() {
 
   shuffle(eligible);
   const chosen = eligible.slice(0, impostorSlots);
-  chosen.forEach(p => { state.roles[p.i] = state.language === "en" ? "You're a false prophet 😈" : "Ești un Profet fals 😈"; });
+  chosen.forEach(p => { state.roles[p.i].isImpostor = true; });
   state.lastImpostors = chosen.map(p => p.name);
 
+  localizeRoles();
   shuffle(state.roles);
 
   document.getElementById("setup").style.display = "none";
@@ -559,21 +579,22 @@ function startGame() {
   state.revealed = false;
 
   updateTurn();
+  document.getElementById("card").textContent = translations[state.language].cardPrompt;
 }
 
 function updateTurn() {
-  const suffix = translations[state.language].playerTurnSuffix;
   document.getElementById("playerTurn").textContent =
-    state.players[state.currentPlayer] + suffix;
+    state.players[state.currentPlayer] + translations[state.language].playerTurnSuffix;
 }
 
 function revealRole() {
   if (state.revealed) return;
 
   const card = document.getElementById("card");
-  card.textContent = state.roles[state.currentPlayer];
+  const currentRole = state.roles[state.currentPlayer];
+  card.textContent = currentRole.text;
 
-  if (state.roles[state.currentPlayer].includes("Profet") || state.roles[state.currentPlayer].includes("prophet"))
+  if (currentRole.isImpostor)
     card.classList.add("impostor");
   else
     card.classList.add("flipped");
@@ -640,8 +661,8 @@ function revealAll() {
 
   state.players.forEach((p, i) => {
     const li = document.createElement("li");
-    const isImpostor = state.roles[i].includes("Profet") || state.roles[i].includes("prophet");
-    li.innerHTML = `<strong>${p}</strong> → <span class="${isImpostor ? 'impostor-label' : ''}">${state.roles[i]}</span>`;
+    const role = state.roles[i];
+    li.innerHTML = `<strong>${p}</strong> → <span class="${role.isImpostor ? 'impostor-label' : ''}">${role.text}</span>`;
     list.appendChild(li);
   });
 
@@ -652,7 +673,6 @@ function closeModal() {
   document.getElementById("modal").classList.remove("open");
 }
 
-// Închide modal dacă se apasă în afara lui
 document.getElementById("modal").addEventListener("click", function(e) {
   if (e.target === this) closeModal();
 });
@@ -674,6 +694,7 @@ function newRound() {
   document.getElementById("nextBtn").style.display = "inline-block";
   document.getElementById("endButtons").style.display = "none";
   document.getElementById("timerSection").style.display = "none";
+  document.getElementById("card").textContent = translations[state.language].cardPrompt;
 }
 
 setLanguage(state.language);
